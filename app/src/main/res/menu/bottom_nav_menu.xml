@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_baseline_app_registration_24"
+        android:title="@string/時間割" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_baseline_schedule_24"
+        android:title="@string/運行情報" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/お知らせ" />
+
+    <item
+        android:id="@+id/navigation_inquiry"
+        android:icon="@drawable/ic_baseline_ring_volume_24"
+        android:title="@string/問い合わせ"/>
+
+</menu>
