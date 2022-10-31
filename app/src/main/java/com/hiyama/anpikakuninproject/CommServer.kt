@@ -8,7 +8,9 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -18,6 +20,7 @@ import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
 
+@Suppress("BlockingMethodInNonBlockingContext")
 class CommServer {
     companion object {
         private const val DEBUG_TAG = "anpikakuninProject"
@@ -26,6 +29,8 @@ class CommServer {
         const val GET = "GET"
         const val POST = "POST"
 
+        const val POSTTEST = -2
+        const val TEST = -1
         const val LOGIN = 0
         const val SCHEDULE = 1
         const val OPERATIONINFO = 2
@@ -45,8 +50,8 @@ class CommServer {
 //        }
     }
 
-    private val ipAddress = ""
-    private val port = ""
+    private val ipAddress = "160.248.2.236"
+    private val port = "3000"
     private var request = ""
     private var url = ""
     private var postData = ""
@@ -62,6 +67,15 @@ class CommServer {
 
     fun setURL(mode: Int) {
         when (mode) {
+            POSTTEST -> {
+                setRequest(POST)
+                url = "http://$ipAddress:$port/auth"
+                postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
+            }
+            TEST -> {
+                setRequest(GET)
+                url = "http://$ipAddress:$port/test"
+            }
             LOGIN -> {
                 url = ""
             }
@@ -80,7 +94,8 @@ class CommServer {
         }
     }
 
-    suspend fun get(encoding: String): String {
+    @WorkerThread
+    suspend fun getInfoBackGroundRunner(encoding: String): String {
         val sb = StringBuffer("")
         val esb = StringBuffer("")
 //        var br: BufferedReader?
@@ -89,9 +104,9 @@ class CommServer {
 
         val getUrl = URL(url)
         Log.i("checkAccessURL", "Access to URL: $getUrl")
-        val huc = getUrl.openConnection() as HttpURLConnection
+        val huc = getUrl.openConnection() as? HttpURLConnection
         val returnVal = withContext(Dispatchers.IO) {
-            huc.let {
+            huc?.let {
                 try {
                     it.connectTimeout = TIMEOUT_MILLIS
                     it.readTimeout = TIMEOUT_MILLIS
