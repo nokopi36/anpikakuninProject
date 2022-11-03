@@ -12,4 +12,6 @@
     <string name="password">パスワード</string>
     <string name="login">login</string>
     <string name="運行情報">運行情報</string>
+    <string name="channel_id">test</string>
+    <string name="channel_name">testChannel</string>
 </resources>

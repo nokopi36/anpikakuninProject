@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "921436063417",
+    "project_id": "anpikakuninproject",
+    "storage_bucket": "anpikakuninproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921436063417:android:71b63f3fa250d4c2fa3d68",
+        "android_client_info": {
+          "package_name": "com.hiyama.anpikakuninproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921436063417-bf97g50uhvtp3i1djcvr7vutqslf5hj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hiyama.anpikakuninproject",
+            "certificate_hash": "663e1d14fa2430023819123d77a8d7cd50f2dbbb"
+          }
+        },
+        {
+          "client_id": "921436063417-qqsilmmk1jg5in5nm2lt6i211m5svrt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuquUyGDjdMjbjl1gw1sMk5BK0Y1MhKRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921436063417-qqsilmmk1jg5in5nm2lt6i211m5svrt4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

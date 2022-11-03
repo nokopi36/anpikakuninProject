@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/drawable/bottom_navigation_color.xml" value="0.3295" />
+        <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.196" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/drawable/ic_baseline_ring_volume_24.xml" value="0.3665" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/drawable/ic_baseline_schedule_24.xml" value="0.505" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.505" />
@@ -14,6 +15,7 @@
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/layout/fragment_home.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/layout/fragment_inquiry.xml" value="0.25" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/layout/fragment_notifications.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/layout/fragment_operationinfo.xml" value="0.3374094202898551" />
         <entry key="..\:/Users/everybody/AndroidStudioProjects/anpikakuninProject/app/src/main/res/menu/bottom_nav_menu.xml" value="0.38697916666666665" />
       </map>
     </option>
