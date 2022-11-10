@@ -69,7 +69,7 @@ class CommServer {
         when (mode) {
             POSTTEST -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/auth"
+                url = "http://$ipAddress:$port/api/auth"
                 postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             }
             TEST -> {
@@ -159,6 +159,7 @@ class CommServer {
             }
             sb.toString()
         }
+        Log.i("returnVAL", returnVal)
         return returnVal
     }
 }
