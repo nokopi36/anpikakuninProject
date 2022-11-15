@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject.ui.notifications
+package com.hiyama.anpikakuninproject.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater

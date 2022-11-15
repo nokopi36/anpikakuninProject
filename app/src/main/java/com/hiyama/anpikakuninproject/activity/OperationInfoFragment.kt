@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject.ui.operationinfo
+package com.hiyama.anpikakuninproject.activity
 
 import android.content.Intent
 import android.net.Uri

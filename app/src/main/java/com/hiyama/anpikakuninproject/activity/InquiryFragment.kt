@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject.ui.inquiry
+package com.hiyama.anpikakuninproject.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater

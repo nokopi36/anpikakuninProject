@@ -6,31 +6,31 @@
     app:startDestination="@+id/navigation_home">
 
 <!--    <activity-->
-<!--        android:name="com.hiyama.anpikakuninproject.LoginActivity"-->
+<!--        android:name="com.hiyama.anpikakuninproject.activity.LoginActivity"-->
 <!--        tools:layout="@layout/activity_login"/>-->
 
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.hiyama.anpikakuninproject.ui.schedule.ScheduleFragment"
+        android:name="com.hiyama.anpikakuninproject.activity.ScheduleFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.hiyama.anpikakuninproject.ui.operationinfo.OperationInfoFragment"
+        android:name="com.hiyama.anpikakuninproject.activity.OperationInfoFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_operationInfo" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.hiyama.anpikakuninproject.ui.notifications.NotificationsFragment"
+        android:name="com.hiyama.anpikakuninproject.activity.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_inquiry"
-        android:name="com.hiyama.anpikakuninproject.ui.inquiry.InquiryFragment"
+        android:name="com.hiyama.anpikakuninproject.activity.InquiryFragment"
         android:label="@string/title_inquiry"
         tools:layout="@layout/fragment_inquiry"/>
 

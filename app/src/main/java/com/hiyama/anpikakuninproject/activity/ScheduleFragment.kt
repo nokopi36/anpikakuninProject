@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject.ui.schedule
+package com.hiyama.anpikakuninproject.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.R
+import java.io.File
 
 class ScheduleFragment : Fragment() {
+
+//    private val fileName = "Schedule.txt"
+//    var file = File(requireContext().filesDir, fileName)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_schedule, container, false)
@@ -17,12 +22,7 @@ class ScheduleFragment : Fragment() {
         return fragmentView
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-    }
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
+    //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
 //
 //        // This callback will only be called when MyFragment is at least Started.

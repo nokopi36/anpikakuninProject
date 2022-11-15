@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,6 +15,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.coroutines.launch
 import com.google.firebase.messaging.FirebaseMessaging
+import com.hiyama.anpikakuninproject.CommServer
+import com.hiyama.anpikakuninproject.MainActivity
+import com.hiyama.anpikakuninproject.PostTest
+import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.User
 import com.hiyama.anpikakuninproject.data.UserInfo
 

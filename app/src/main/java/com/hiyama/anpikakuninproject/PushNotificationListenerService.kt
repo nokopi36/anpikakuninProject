@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.hiyama.anpikakuninproject.activity.LoginActivity
 import java.util.*
 
 class PushNotificationListenerService: FirebaseMessagingService() {
