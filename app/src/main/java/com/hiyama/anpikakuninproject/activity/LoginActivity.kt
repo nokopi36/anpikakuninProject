@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
             postInfo()
         }
 
+        /*------------------ここからpush通知に関すること------------------*/
         // インスタンスIDの自動生成を有効化する場合、true
         // AndroidManifestにて自動生成を禁止にしていない場合、不要
 //        FirebaseMessaging.getInstance().isAutoInitEnabled = true
@@ -77,8 +78,9 @@ class LoginActivity : AppCompatActivity() {
 
                 val msg = "InstanceID Token: $token"
                 Log.d("msg",msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
+        /*------------------ここまで------------------*/
 
     }
 
@@ -100,6 +102,10 @@ class LoginActivity : AppCompatActivity() {
             Log.i("POST",result)
             testTxt.text = result
         }
+    }
+
+    fun login(){
+
     }
 
     fun saveAccount() {
