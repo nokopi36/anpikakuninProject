@@ -1,20 +1,12 @@
 package com.hiyama.anpikakuninproject
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.net.Uri
-import android.os.Build
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
-import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hiyama.anpikakuninproject.data.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -37,17 +29,6 @@ class CommServer {
         const val NOTIFICATION = 3
         const val INQUIRY = 4
 
-//        val UB: Uri.Builder = Uri.Builder()
-
-//        @RequiresApi(Build.VERSION_CODES.M)
-//        fun isConnected(activity: AppCompatActivity) : Boolean{
-//            val connMgr = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//            val caps = connMgr.getNetworkCapabilities(connMgr.activeNetwork)
-//            if (caps!=null){
-//                return true
-//            }
-//            return false
-//        }
     }
 
     private val ipAddress = "160.248.2.236"
@@ -77,7 +58,9 @@ class CommServer {
                 url = "http://$ipAddress:$port/test"
             }
             LOGIN -> {
+                setRequest(POST)
                 url = ""
+                postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
             }
             SCHEDULE -> {
                 url = ""
@@ -98,10 +81,6 @@ class CommServer {
     suspend fun getInfoBackGroundRunner(encoding: String): String {
         val sb = StringBuffer("")
         val esb = StringBuffer("")
-//        var br: BufferedReader?
-//        var ism: InputStream?
-//        var isr: InputStreamReader?
-
         val getUrl = URL(url)
         Log.i("checkAccessURL", "Access to URL: $getUrl")
         val huc = getUrl.openConnection() as? HttpURLConnection
@@ -112,18 +91,10 @@ class CommServer {
                     it.readTimeout = TIMEOUT_MILLIS
                     it.requestMethod = request
                     it.useCaches = false
-                    it.doOutput = (request == POST)
+                    it.doOutput = false
                     it.doInput = true
                     it.setRequestProperty("Content-Type", "application/json; charset=utf-8")
                     it.connect()
-
-                    if (request == POST) {
-                        val outputStream = it.outputStream
-                        outputStream.write(postData.toByteArray())
-                        outputStream.flush()
-                        outputStream.close()
-                        Log.i("Send Data to Server", "DATA: $postData")
-                    }
 
                     val responseCode = it.responseCode
                     this@CommServer.responseCode = responseCode
@@ -131,7 +102,6 @@ class CommServer {
 
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         val ism = it.inputStream
-                        //                isr = InputStreamReader(ism, encoding)
                         val br = BufferedReader(InputStreamReader(ism, encoding))
                         var line: String? = ""
                         while (line != null) {
@@ -139,10 +109,8 @@ class CommServer {
                             line = br.readLine()
                         }
                         ism.close()
-//                        sb.toString()
                     } else {
                         val ism = it.errorStream
-                        //                isr = InputStreamReader(ism, encoding)
                         val br = BufferedReader(InputStreamReader(ism, encoding))
                         var line: String? = ""
                         while (line != null) {
@@ -150,7 +118,6 @@ class CommServer {
                             line = br.readLine()
                         }
                         ism.close()
-//                        sb.toString()
                     }
                 } catch (e: SocketTimeoutException) {
                     Log.w(DEBUG_TAG, "通信タイムアウト", e)
@@ -159,7 +126,67 @@ class CommServer {
             }
             sb.toString()
         }
-        Log.i("returnVAL", returnVal)
+        Log.i("get:returnVAL", returnVal)
         return returnVal
     }
+
+    @WorkerThread
+    suspend fun postInfoBackGroundRunner(encoding: String): String {
+        val sb = StringBuffer("")
+        val esb = StringBuffer("")
+        val getUrl = URL(url)
+        Log.i("checkAccessURL", "Access to URL: $getUrl")
+        val huc = getUrl.openConnection() as? HttpURLConnection
+        val returnVal = withContext(Dispatchers.IO) {
+            huc?.let {
+                try {
+                    it.connectTimeout = TIMEOUT_MILLIS
+                    it.readTimeout = TIMEOUT_MILLIS
+                    it.requestMethod = request
+                    it.useCaches = false
+                    it.doOutput = true
+                    it.doInput = true
+                    it.setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                    it.connect()
+
+                    val outputStream = it.outputStream
+                    outputStream.write(postData.toByteArray())
+                    outputStream.flush()
+                    outputStream.close()
+                    Log.i("Send Data to Server", "DATA: $postData")
+
+                    val responseCode = it.responseCode
+                    this@CommServer.responseCode = responseCode
+                    Log.i("get Response", "ResponseCode: ${this@CommServer.responseCode}")
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        val ism = it.inputStream
+                        val br = BufferedReader(InputStreamReader(ism, encoding))
+                        var line: String? = ""
+                        while (line != null) {
+                            sb.append(line)
+                            line = br.readLine()
+                        }
+                        ism.close()
+                    } else {
+                        val ism = it.errorStream
+                        val br = BufferedReader(InputStreamReader(ism, encoding))
+                        var line: String? = ""
+                        while (line != null) {
+                            esb.append(line)
+                            line = br.readLine()
+                        }
+                        ism.close()
+                    }
+                } catch (e: SocketTimeoutException) {
+                    Log.w(DEBUG_TAG, "通信タイムアウト", e)
+                }
+                it.disconnect()
+            }
+            sb.toString()
+        }
+        Log.i("post:returnVAL", returnVal)
+        return returnVal
+    }
+
 }
