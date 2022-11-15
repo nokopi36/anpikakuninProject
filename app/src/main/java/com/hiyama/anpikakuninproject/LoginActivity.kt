@@ -10,43 +10,48 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.coroutines.launch
 import com.google.firebase.messaging.FirebaseMessaging
+import com.hiyama.anpikakuninproject.data.User
+import com.hiyama.anpikakuninproject.data.UserInfo
 
 class LoginActivity : AppCompatActivity() {
 
     val commServer = CommServer()
 
-//    val builder = NotificationCompat.Builder(this, )
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val userName = findViewById<EditText>(R.id.userName)
+        val password = findViewById<EditText>(R.id.passWord)
+
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            UserInfo.userName = userName.text.toString()
+            UserInfo.password = password.text.toString()
+            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
+            Log.i("postData",postData )
             startActivity(intent)
             overridePendingTransition(0,0)
         }
 
-        val testBtn = findViewById<Button>(R.id.testBtn)
+        val testBtn = findViewById<Button>(R.id.testBtn) //ServerからGETできるかテストするためのボタン
         testBtn.setOnClickListener {
             commServer.setURL(CommServer.TEST)
-            receiveInfo()
+            getInfo()
             val postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             Log.i("postData",postData )
         }
 
-        val postBtn = findViewById<Button>(R.id.postBtn)
+        val postBtn = findViewById<Button>(R.id.postBtn) //ServerからPOSTできるかテストするためのボタン
         postBtn.setOnClickListener {
             commServer.setURL(CommServer.POSTTEST)
-            receiveInfo2()
+            postInfo()
         }
 
         // インスタンスIDの自動生成を有効化する場合、true
@@ -74,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @UiThread
-    private fun receiveInfo(){
+    private fun getInfo(){
         val testTxt = findViewById<TextView>(R.id.testText)
         lifecycleScope.launch {
             val result = commServer.getInfoBackGroundRunner("UTF-8")
@@ -84,10 +89,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @UiThread
-    private fun receiveInfo2(){ //posttest
+    private fun postInfo(){ //posttest
         val testTxt = findViewById<TextView>(R.id.postText)
         lifecycleScope.launch {
-            val result = commServer.getInfoBackGroundRunner("UTF-8")
+            val result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
             testTxt.text = result
         }
