@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.data
 
 object PostData{
     var uuid = "2266003"

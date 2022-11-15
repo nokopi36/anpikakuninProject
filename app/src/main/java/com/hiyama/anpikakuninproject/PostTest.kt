@@ -1,6 +1,7 @@
 package com.hiyama.anpikakuninproject
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.hiyama.anpikakuninproject.data.PostData
 
 class PostTest (
     @JsonProperty("uuid") var uuid:String,
