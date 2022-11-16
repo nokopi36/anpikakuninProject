@@ -3,6 +3,7 @@ package com.hiyama.anpikakuninproject
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.data.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

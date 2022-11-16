@@ -1,7 +1,6 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.data
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.hiyama.anpikakuninproject.data.PostData
 
 class PostTest (
     @JsonProperty("uuid") var uuid:String,
@@ -10,7 +9,7 @@ class PostTest (
     @JsonProperty("fcmtoken") var fcmtoken:String
 ) {
     companion object {
-        fun getPostData() : PostTest{
+        fun getPostData() : PostTest {
             return PostTest(
                 PostData.uuid,
                 PostData.userName,

@@ -1,5 +1,6 @@
 package com.hiyama.anpikakuninproject.activity
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.UiThread
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -17,14 +19,18 @@ import kotlinx.coroutines.launch
 import com.google.firebase.messaging.FirebaseMessaging
 import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.MainActivity
-import com.hiyama.anpikakuninproject.PostTest
+import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.data.JsonParser
+import com.hiyama.anpikakuninproject.data.PostInfo
 import com.hiyama.anpikakuninproject.data.User
 import com.hiyama.anpikakuninproject.data.UserInfo
+import kotlinx.coroutines.runBlocking
+import java.net.HttpURLConnection
 
 class LoginActivity : AppCompatActivity() {
 
-    val commServer = CommServer()
+    private val commServer = CommServer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.passWord)
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
-        loginBtn.setOnClickListener {
+        loginBtn.setOnClickListener {// ログインするためのボタン
             val intent = Intent(this, MainActivity::class.java)
             UserInfo.userName = userName.text.toString()
             UserInfo.password = password.text.toString()
@@ -52,10 +58,10 @@ class LoginActivity : AppCompatActivity() {
             Log.i("postData",postData )
         }
 
-        val postBtn = findViewById<Button>(R.id.postBtn) //ServerからPOSTできるかテストするためのボタン
+        val postBtn = findViewById<Button>(R.id.postBtn) //ServerにPOSTできるかテストするためのボタン
         postBtn.setOnClickListener {
             commServer.setURL(CommServer.POSTTEST)
-            postInfo()
+            postTest()
         }
 
         /*------------------ここからpush通知に関すること------------------*/
@@ -84,6 +90,73 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun login(): Boolean{
+        val result = postInfo()
+        while(commServer.responseCode == -1){/* wait for response */}
+        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
+            Log.i("Return Value From Server", "Value: $result")
+//            val result = postInfo()
+            if (result != "null"){
+                val user = JsonParser.userParse(result)
+                return if (user == null){
+                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
+                    false
+                } else {
+                    UserInfo.initialize(user)
+                    Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+            } else {
+                incorrectSignIn(this)
+                return false
+            }
+        } else {
+            incorrectSignIn(this)
+            return false
+        }
+    }
+
+    private fun postTest(): Boolean{
+        val postSuccess = findViewById<TextView>(R.id.postSuccess)
+        val postMessage = findViewById<TextView>(R.id.postMessage)
+        val postToken = findViewById<TextView>(R.id.postToken)
+
+        val result = postInfo()
+        Log.i("postTestResult", result)
+        while(commServer.responseCode == -1){/* wait for response */}
+        Log.i("resposeCode", commServer.responseCode.toString())
+        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
+            Log.i("Return Value From Server", "Value: $result")
+//            val result = postInfo()
+            if (result != "null"){
+                val postResultTest = JsonParser.postResultTestParse(result)
+                Log.i("postResuleTest", postResultTest.toString())
+                return if (postResultTest == null){
+                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
+                    false
+                } else {
+                    PostInfo.initialize(postResultTest)
+                    postSuccess.text = PostInfo.success.toString()
+                    Log.i("success", PostInfo.success.toString())
+                    postMessage.text = PostInfo.message
+                    Log.i("message", PostInfo.message)
+                    postToken.text = PostInfo.token
+                    Log.i("token", PostInfo.token)
+
+                    true
+                }
+            } else {
+                incorrectSignIn(this)
+                return false
+            }
+        } else {
+            incorrectSignIn(this)
+            return false
+        }
+    }
+
     @UiThread
     private fun getInfo(){
         val testTxt = findViewById<TextView>(R.id.testText)
@@ -95,17 +168,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @UiThread
-    private fun postInfo(){ //posttest
+    private fun postInfo(): String{ //posttest
         val testTxt = findViewById<TextView>(R.id.postText)
-        lifecycleScope.launch {
-            val result = commServer.postInfoBackGroundRunner("UTF-8")
+        var result = ""
+        runBlocking { // postして結果が返ってくるまで待機
+            result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
             testTxt.text = result
         }
+        return result
     }
 
-    fun login(){
-
+    private fun incorrectSignIn(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle("●サインイン失敗")
+            .setMessage("ユーザ名もしくはパスワードが間違っています")
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
     }
 
     fun saveAccount() {

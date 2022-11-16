@@ -55,6 +55,8 @@
 
     </LinearLayout>
 
+<!--    以下テスト用View     -->
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,6 +88,33 @@
         android:id="@+id/postText"
         android:text="string"
         app:layout_constraintTop_toBottomOf="@id/postBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postSuccess"
+        android:text="postSuccess"
+        app:layout_constraintTop_toBottomOf="@id/postText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postMessage"
+        android:text="postMessage"
+        app:layout_constraintTop_toBottomOf="@id/postSuccess"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postToken"
+        android:text="postToken"
+        app:layout_constraintTop_toBottomOf="@id/postMessage"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
