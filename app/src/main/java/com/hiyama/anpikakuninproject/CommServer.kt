@@ -3,6 +3,7 @@ package com.hiyama.anpikakuninproject
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hiyama.anpikakuninproject.data.LoginInfo
 import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.data.User
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +52,7 @@ class CommServer {
         when (mode) {
             POSTTEST -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/auth"
+                url = "http://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             }
             TEST -> {
@@ -60,8 +61,9 @@ class CommServer {
             }
             LOGIN -> {
                 setRequest(POST)
-                url = ""
+                url = "http://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
+                Log.i("postData", postData)
             }
             SCHEDULE -> {
                 url = ""
@@ -95,6 +97,7 @@ class CommServer {
                     it.doOutput = false
                     it.doInput = true
                     it.setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                    it.setRequestProperty("x-access-token", LoginInfo.token)
                     it.connect()
 
                     val responseCode = it.responseCode
@@ -148,6 +151,7 @@ class CommServer {
                     it.doOutput = true
                     it.doInput = true
                     it.setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                    it.setRequestProperty("x-access-token", LoginInfo.token)
                     it.connect()
 
                     val outputStream = it.outputStream

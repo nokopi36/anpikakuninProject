@@ -12,18 +12,16 @@ import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
-import kotlinx.coroutines.launch
 import com.google.firebase.messaging.FirebaseMessaging
 import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.MainActivity
 import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.data.DataChecker
 import com.hiyama.anpikakuninproject.data.JsonParser
-import com.hiyama.anpikakuninproject.data.PostInfo
-import com.hiyama.anpikakuninproject.data.User
+import com.hiyama.anpikakuninproject.data.LoginInfo
 import com.hiyama.anpikakuninproject.data.UserInfo
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
@@ -36,24 +34,33 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val userName = findViewById<EditText>(R.id.userName)
-        val password = findViewById<EditText>(R.id.passWord)
+        val userNameEditText = findViewById<EditText>(R.id.userName)
+        val passwordEditText = findViewById<EditText>(R.id.passWord)
+        val testTxt = findViewById<TextView>(R.id.testText)
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
-        loginBtn.setOnClickListener {// ログインするためのボタン
-            val intent = Intent(this, MainActivity::class.java)
-            UserInfo.userName = userName.text.toString()
-            UserInfo.password = password.text.toString()
-            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
-            Log.i("postData",postData )
-            startActivity(intent)
+        loginBtn.setOnClickListener { // ログインするためのボタン
+            val userName = userNameEditText.text.toString()
+            val passWord = passwordEditText.text.toString()
+//            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
+//            Log.i("postData",postData )
+            if (checkCorrectEntered(userName, passWord)){
+                UserInfo.userName = userName
+                UserInfo.password = passWord
+                commServer.setURL(CommServer.LOGIN)
+                Log.i("uuid, pass", UserInfo.userName + UserInfo.password)
+                if (!login()){
+                    passwordEditText.text.clear()
+                }
+            }
             overridePendingTransition(0,0)
         }
 
         val testBtn = findViewById<Button>(R.id.testBtn) //ServerからGETできるかテストするためのボタン
         testBtn.setOnClickListener {
             commServer.setURL(CommServer.TEST)
-            getInfo()
+            val result = getInfo()
+            testTxt.text = result
             val postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             Log.i("postData",postData )
         }
@@ -81,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
                 // new Instance ID token
                 // ここで取得したtokenをテストする際のインスタンスIDとして設定する
                 val token = task.result
+                UserInfo.fcmToken = token
 
                 val msg = "InstanceID Token: $token"
                 Log.d("msg",msg)
@@ -90,27 +98,27 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun login(): Boolean{
-        val result = postInfo()
+    private fun login(): Boolean {
+        val result = loginInfo()
         while(commServer.responseCode == -1){/* wait for response */}
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
             Log.i("Return Value From Server", "Value: $result")
-//            val result = postInfo()
-            if (result != "null"){
-                val user = JsonParser.userParse(result)
-                return if (user == null){
-                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
-                    false
-                } else {
-                    UserInfo.initialize(user)
+            val loginResult = JsonParser.loginResultParse(result)
+            return if (loginResult == null){
+                Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
+                false
+            } else {
+                LoginInfo.initialize(loginResult)
+
+                if (LoginInfo.success){
                     Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     true
+                } else {
+                    incorrectSignIn(this)
+                    false
                 }
-            } else {
-                incorrectSignIn(this)
-                return false
             }
         } else {
             incorrectSignIn(this)
@@ -129,21 +137,20 @@ class LoginActivity : AppCompatActivity() {
         Log.i("resposeCode", commServer.responseCode.toString())
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
             Log.i("Return Value From Server", "Value: $result")
-//            val result = postInfo()
             if (result != "null"){
-                val postResultTest = JsonParser.postResultTestParse(result)
+                val postResultTest = JsonParser.loginResultParse(result)
                 Log.i("postResuleTest", postResultTest.toString())
                 return if (postResultTest == null){
                     Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
                     false
                 } else {
-                    PostInfo.initialize(postResultTest)
-                    postSuccess.text = PostInfo.success.toString()
-                    Log.i("success", PostInfo.success.toString())
-                    postMessage.text = PostInfo.message
-                    Log.i("message", PostInfo.message)
-                    postToken.text = PostInfo.token
-                    Log.i("token", PostInfo.token)
+                    LoginInfo.initialize(postResultTest)
+                    postSuccess.text = LoginInfo.success.toString()
+                    Log.i("success", LoginInfo.success.toString())
+                    postMessage.text = LoginInfo.message
+                    Log.i("message", LoginInfo.message)
+                    postToken.text = LoginInfo.token
+                    Log.i("token", LoginInfo.token)
 
                     true
                 }
@@ -158,23 +165,33 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @UiThread
-    private fun getInfo(){
-        val testTxt = findViewById<TextView>(R.id.testText)
-        lifecycleScope.launch {
-            val result = commServer.getInfoBackGroundRunner("UTF-8")
+    private fun getInfo(): String{
+        var result = ""
+        runBlocking {
+            result = commServer.getInfoBackGroundRunner("UTF-8")
             Log.i("GET",result)
-            testTxt.text = result
         }
+        return result
     }
 
     @UiThread
     private fun postInfo(): String{ //posttest
-        val testTxt = findViewById<TextView>(R.id.postText)
+        val postTxt = findViewById<TextView>(R.id.postText)
         var result = ""
         runBlocking { // postして結果が返ってくるまで待機
             result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
-            testTxt.text = result
+            postTxt.text = result
+        }
+        return result
+    }
+
+    @UiThread
+    private fun loginInfo(): String{ //posttest
+        var result = ""
+        runBlocking { // postして結果が返ってくるまで待機
+            result = commServer.postInfoBackGroundRunner("UTF-8")
+            Log.i("POST",result)
         }
         return result
     }
@@ -185,6 +202,25 @@ class LoginActivity : AppCompatActivity() {
             .setMessage("ユーザ名もしくはパスワードが間違っています")
             .setPositiveButton("OK") { _, _ -> }
             .show()
+    }
+
+    private fun checkCorrectEntered(userName:String, password:String) : Boolean {
+        Log.e(">>>","USERNAME:$userName, PASSWORD:$password")
+
+        /* 文字列が入力されていない */
+        if(userName.isEmpty() || password.isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle("●サインイン失敗")
+                .setMessage("ユーザ名もしくはパスワードが入力されていません")
+                .setPositiveButton("OK") { _, _ -> }
+                .show()
+            return false
+        }
+
+        /* ユーザ名の確認 */
+        if(!DataChecker.isUserId(userName, this)) return false
+
+        return true
     }
 
     fun saveAccount() {
