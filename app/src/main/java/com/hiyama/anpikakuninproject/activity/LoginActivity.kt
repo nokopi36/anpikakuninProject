@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
             val passWord = hashSHA256String(passwordEditText.text.toString())
 //            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
 //            Log.i("postData",postData )
-            if (checkCorrectEntered(userName, passWord)){
+            if (checkCorrectEntered(userName, passwordEditText.text.toString())){
                 UserInfo.userName = userName
                 UserInfo.password = passWord
                 commServer.setURL(CommServer.LOGIN)
