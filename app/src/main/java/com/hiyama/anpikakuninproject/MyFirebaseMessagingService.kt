@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.hiyama.anpikakuninproject.activity.LoginActivity
 
 class MyFirebaseMessagingService :FirebaseMessagingService() {
     override fun onNewToken(token: String) {
@@ -40,7 +41,7 @@ class MyFirebaseMessagingService :FirebaseMessagingService() {
 
     // notificationを生成して表示
     private fun sendNotification(messageBody: String) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
             PendingIntent.FLAG_IMMUTABLE)
@@ -48,8 +49,8 @@ class MyFirebaseMessagingService :FirebaseMessagingService() {
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("FCM Message")
+            .setSmallIcon(R.drawable.ic_baseline_call_24)
+//            .setContentTitle("FCM Message")
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
