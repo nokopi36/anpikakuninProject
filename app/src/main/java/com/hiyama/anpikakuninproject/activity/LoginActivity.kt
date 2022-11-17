@@ -23,11 +23,11 @@ import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.DataChecker
 import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.LoginInfo
-import com.hiyama.anpikakuninproject.data.SafetyCheck
 import com.hiyama.anpikakuninproject.data.SafetyCheckInfo
 import com.hiyama.anpikakuninproject.data.UserInfo
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
 
@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
             val userName = userNameEditText.text.toString()
-            val passWord = passwordEditText.text.toString()
+            val passWord = hashSHA256String(passwordEditText.text.toString())
 //            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
 //            Log.i("postData",postData )
             if (checkCorrectEntered(userName, passWord)){
@@ -242,6 +242,18 @@ class LoginActivity : AppCompatActivity() {
         if(!DataChecker.isUserId(userName, this)) return false
 
         return true
+    }
+
+    private fun hashSHA256String(target: String): String {
+        val hashBytes = MessageDigest.getInstance("SHA-256").digest(target.toByteArray())
+        val hexChars = "0123456789abcdef"
+        val result = StringBuilder(hashBytes.size * 2)
+        hashBytes.forEach {
+            val i = it.toInt()
+            result.append(hexChars[i shr 4 and 0x0f])
+            result.append(hexChars[i and 0x0f])
+        }
+        return result.toString()
     }
 
     fun saveAccount() {
