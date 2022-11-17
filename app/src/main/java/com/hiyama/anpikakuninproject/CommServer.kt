@@ -1,7 +1,9 @@
 package com.hiyama.anpikakuninproject
 
+import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.appcompat.app.AlertDialog
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hiyama.anpikakuninproject.data.LoginInfo
 import com.hiyama.anpikakuninproject.data.PostTest
@@ -9,6 +11,7 @@ import com.hiyama.anpikakuninproject.data.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -130,8 +133,13 @@ class CommServer {
                     }
                 } catch (e: SocketTimeoutException) {
                     Log.w(DEBUG_TAG, "通信タイムアウト", e)
+                } catch (e: IOException) {
+                    Log.i(DEBUG_TAG, "接続できません", e)
+                    throw e
+                } finally {
+                    it.disconnect()
                 }
-                it.disconnect()
+//                it.disconnect()
             }
             sb.toString()
         }
