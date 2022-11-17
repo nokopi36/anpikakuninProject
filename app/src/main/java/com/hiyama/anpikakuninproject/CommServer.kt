@@ -30,6 +30,7 @@ class CommServer {
         const val OPERATIONINFO = 2
         const val NOTIFICATION = 3
         const val INQUIRY = 4
+        const val SAFETY_CHECK = 5
 
     }
 
@@ -76,6 +77,10 @@ class CommServer {
             }
             INQUIRY -> {
                 url = ""
+            }
+            SAFETY_CHECK -> {
+                setRequest(GET)
+                url = "http://$ipAddress:$port/api/safety-check"
             }
         }
     }

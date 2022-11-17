@@ -3,6 +3,7 @@ package com.hiyama.anpikakuninproject.activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -22,6 +23,8 @@ import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.DataChecker
 import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.LoginInfo
+import com.hiyama.anpikakuninproject.data.SafetyCheck
+import com.hiyama.anpikakuninproject.data.SafetyCheckInfo
 import com.hiyama.anpikakuninproject.data.UserInfo
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
@@ -37,6 +40,8 @@ class LoginActivity : AppCompatActivity() {
         val userNameEditText = findViewById<EditText>(R.id.userName)
         val passwordEditText = findViewById<EditText>(R.id.passWord)
         val testTxt = findViewById<TextView>(R.id.testText)
+
+        safetyCheckActivity()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
@@ -151,7 +156,6 @@ class LoginActivity : AppCompatActivity() {
                     Log.i("message", LoginInfo.message)
                     postToken.text = LoginInfo.token
                     Log.i("token", LoginInfo.token)
-
                     true
                 }
             } else {
@@ -161,6 +165,23 @@ class LoginActivity : AppCompatActivity() {
         } else {
             incorrectSignIn(this)
             return false
+        }
+    }
+
+    private fun safetyCheckActivity(){
+        commServer.setURL(CommServer.SAFETY_CHECK)
+        val result = getInfo()
+        while(commServer.responseCode == -1){/* wait for response */}
+        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
+            Log.i("Return Value From Server", "Value: $result")
+            val safetyCheck = JsonParser.safetyCheckParse(result)
+            SafetyCheckInfo.initialize(safetyCheck!!)
+            if (SafetyCheckInfo.check == "True"){
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/RyotaHiyama"))
+                startActivity(intent)
+            } else {
+                /* do nothing */
+            }
         }
     }
 

@@ -22,4 +22,13 @@ object JsonParser {
         }
     }
 
+    fun safetyCheckParse(str: String) : SafetyCheck? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val safetyCheck: SafetyCheck = mapper.readValue(str)
+            safetyCheck
+        }
+    }
+
 }
