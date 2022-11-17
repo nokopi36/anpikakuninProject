@@ -6,6 +6,7 @@ import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hiyama.anpikakuninproject.data.LoginInfo
+import com.hiyama.anpikakuninproject.data.PassWord
 import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.data.User
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,7 @@ class CommServer {
         const val NOTIFICATION = 3
         const val INQUIRY = 4
         const val SAFETY_CHECK = 5
+        const val CHANGE_PASSWORD = 6
 
     }
 
@@ -84,6 +86,12 @@ class CommServer {
             SAFETY_CHECK -> {
                 setRequest(GET)
                 url = "http://$ipAddress:$port/api/safety-check"
+            }
+            CHANGE_PASSWORD -> {
+                setRequest(POST)
+                url = "http://$ipAddress:$port/api/login/update"
+                postData = jacksonObjectMapper().writeValueAsString(PassWord.getPasswordData())
+                Log.i("postData", postData)
             }
         }
     }

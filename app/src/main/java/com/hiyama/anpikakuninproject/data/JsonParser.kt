@@ -31,4 +31,13 @@ object JsonParser {
         }
     }
 
+    fun changePasswordParse(str: String) : ChangePasswordResult? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val changePasswordResult: ChangePasswordResult = mapper.readValue(str)
+            changePasswordResult
+        }
+    }
+
 }

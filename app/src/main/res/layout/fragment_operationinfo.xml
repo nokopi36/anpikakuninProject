@@ -75,6 +75,14 @@
         app:layout_constraintRight_toRightOf="parent"
         android:text="test"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/changePasswordBtn"
+        android:text="@string/changePassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

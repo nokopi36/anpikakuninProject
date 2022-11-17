@@ -47,6 +47,12 @@ class OperationInfoFragment : Fragment() {
             testTxt.text = result
         }
 
+        val changePasswordBtn = fragmentView.findViewById<Button>(R.id.changePasswordBtn)
+        changePasswordBtn.setOnClickListener {
+            val intent = Intent(activity, PasswordActivity::class.java)
+            startActivity(intent)
+        }
+
         return fragmentView
 
     }
