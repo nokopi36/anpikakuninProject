@@ -20,7 +20,6 @@ import kotlinx.coroutines.runBlocking
 class OperationInfoFragment : Fragment() {
 
     val commServer = CommServer()
-    var result = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -43,10 +42,7 @@ class OperationInfoFragment : Fragment() {
         val testBtn = fragmentView.findViewById<Button>(R.id.testBtn)
         testBtn.setOnClickListener {
             commServer.setURL(CommServer.TEST)
-//            runBlocking {
-//                receiveInfo()
-//            }
-            receiveInfo()
+            val result = getInfo()
             Log.i("receive result", result)
             testTxt.text = result
         }
@@ -56,14 +52,13 @@ class OperationInfoFragment : Fragment() {
     }
 
     @UiThread
-    private fun receiveInfo(){
-//        var result: String
-        lifecycleScope.launch {
+    private fun getInfo(): String{
+        var result = ""
+        runBlocking {
             result = commServer.getInfoBackGroundRunner("UTF-8")
-            Log.i("result", result)
+            Log.i("GET",result)
         }
-//        Log.i("return result", result)
-//        return result
+        return result
     }
 
     override fun onDestroyView() {
