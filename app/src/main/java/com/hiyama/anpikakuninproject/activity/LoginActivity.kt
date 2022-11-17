@@ -121,12 +121,12 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 } else {
-                    incorrectSignIn(this)
+                    incorrectLogin(this)
                     false
                 }
             }
         } else {
-            incorrectSignIn(this)
+            incorrectLogin(this)
             return false
         }
     }
@@ -159,11 +159,11 @@ class LoginActivity : AppCompatActivity() {
                     true
                 }
             } else {
-                incorrectSignIn(this)
+                incorrectLogin(this)
                 return false
             }
         } else {
-            incorrectSignIn(this)
+            incorrectLogin(this)
             return false
         }
     }
@@ -217,7 +217,7 @@ class LoginActivity : AppCompatActivity() {
         return result
     }
 
-    private fun incorrectSignIn(context: Context) {
+    private fun incorrectLogin(context: Context) {
         AlertDialog.Builder(context)
             .setTitle("●サインイン失敗")
             .setMessage("ユーザ名もしくはパスワードが間違っています")
