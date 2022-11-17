@@ -34,8 +34,6 @@
             </intent-filter>
         </service>
 
-<!--        <service android:name=".My"-->
-
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true">

@@ -37,23 +37,25 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
+
         val userNameEditText = findViewById<EditText>(R.id.userName)
         val passwordEditText = findViewById<EditText>(R.id.passWord)
         val testTxt = findViewById<TextView>(R.id.testText)
 
         safetyCheckActivity()
+        autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
             val userName = userNameEditText.text.toString()
-            val passWord = hashSHA256String(passwordEditText.text.toString())
-//            val postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
-//            Log.i("postData",postData )
-            if (checkCorrectEntered(userName, passwordEditText.text.toString())){
+            val passWord = passwordEditText.text.toString()
+            if (checkCorrectEntered(userName, passWord)){
                 UserInfo.userName = userName
-                UserInfo.password = passWord
+                UserInfo.password = hashSHA256String(passWord)
+                sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
+                sharedPreferences.edit().putString("password", passWord).apply()
                 commServer.setURL(CommServer.LOGIN)
-                Log.i("uuid, pass", UserInfo.userName + UserInfo.password)
                 if (!login()){
                     passwordEditText.text.clear()
                 }
@@ -105,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login(): Boolean {
         val result = loginInfo()
+//        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
         while(commServer.responseCode == -1){/* wait for response */}
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
             Log.i("Return Value From Server", "Value: $result")
@@ -114,7 +117,6 @@ class LoginActivity : AppCompatActivity() {
                 false
             } else {
                 LoginInfo.initialize(loginResult)
-
                 if (LoginInfo.success){
                     Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
@@ -139,12 +141,12 @@ class LoginActivity : AppCompatActivity() {
         val result = postInfo()
         Log.i("postTestResult", result)
         while(commServer.responseCode == -1){/* wait for response */}
-        Log.i("resposeCode", commServer.responseCode.toString())
+        Log.i("responseCode", commServer.responseCode.toString())
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
             Log.i("Return Value From Server", "Value: $result")
             if (result != "null"){
                 val postResultTest = JsonParser.loginResultParse(result)
-                Log.i("postResuleTest", postResultTest.toString())
+                Log.i("postResultTest", postResultTest.toString())
                 return if (postResultTest == null){
                     Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
                     false
@@ -256,13 +258,19 @@ class LoginActivity : AppCompatActivity() {
         return result.toString()
     }
 
-    fun saveAccount() {
-        val editor :SharedPreferences.Editor = getSharedPreferences("ID_STORAGE", MODE_PRIVATE).edit()
-        val primaryUserNumber = findViewById<EditText>(R.id.userName).text.toString()
-        val primaryPassword = findViewById<EditText>(R.id.passWord).text.toString()
-        editor.putString("PRIMARY_USERNUMBER", primaryUserNumber)
-        editor.putString("PRIMARY_PASSWORD", primaryPassword)
-        editor.commit()
+    private fun autoLogin(){
+        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val savedUserName = sharedPreferences.getString("userName", "NO_USERNAME")
+        val savedPassWord = sharedPreferences.getString("password", "NO_PASSWORD")
+        Log.i(">>>", "sharedUser:$savedUserName, sharedPass:$savedPassWord")
+        if (savedUserName == "NO_USERNAME" || savedPassWord == "NO_PASSWORD"){
+            /* do nothing */
+        } else {
+            UserInfo.userName = savedUserName!!
+            UserInfo.password = hashSHA256String(savedPassWord!!)
+            commServer.setURL(CommServer.LOGIN)
+            login()
+        }
     }
 
 }
