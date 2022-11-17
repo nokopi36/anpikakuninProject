@@ -30,25 +30,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
-//        onBackPressedDispatcher.addCallback{
-//            val builder = AlertDialog.Builder(activity)
-//            builder.setTitle("ログアウトしますか？")
-//                .setPositiveButton("はい") { _, _ ->
-//                    finish()
-//                }
-//                .setNegativeButton("いいえ") { _, _ -> }
-//                .show()
-//        }
     }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle("ログアウトしますか？")
-//            .setPositiveButton("はい") { _, _ ->
-//                finish()
-//            }
-//            .setNegativeButton("いいえ") { _, _ -> }
-//            .show()
-//    }
+    override fun onBackPressed() { // 端末の戻るボタンが押された時
+        /* do nothing */
+    }
+
 }
