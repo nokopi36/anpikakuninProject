@@ -24,8 +24,6 @@ class OperationInfoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_operationinfo, container, false)
-        val testTxt = fragmentView.findViewById<TextView>(R.id.testText)
-
 
         val hcuInfo = fragmentView.findViewById<Button>(R.id.hcu)
         hcuInfo.setOnClickListener {
@@ -39,19 +37,7 @@ class OperationInfoFragment : Fragment() {
             startActivity(intent)
         }
 
-        val testBtn = fragmentView.findViewById<Button>(R.id.testBtn)
-        testBtn.setOnClickListener {
-            commServer.setURL(CommServer.TEST)
-            val result = getInfo()
-            Log.i("receive result", result)
-            testTxt.text = result
-        }
 
-        val changePasswordBtn = fragmentView.findViewById<Button>(R.id.changePasswordBtn)
-        changePasswordBtn.setOnClickListener {
-            val intent = Intent(activity, PasswordActivity::class.java)
-            startActivity(intent)
-        }
 
         return fragmentView
 
