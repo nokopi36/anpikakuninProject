@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun safetyCheckActivity(){
+    private fun safetyCheckActivity(){ // 安否確認用の関数
         commServer.setURL(CommServer.SAFETY_CHECK)
         val result = getInfo()
         while(commServer.responseCode == -1){/* wait for response */}
