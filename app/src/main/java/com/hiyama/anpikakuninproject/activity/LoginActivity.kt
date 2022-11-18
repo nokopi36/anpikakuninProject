@@ -2,7 +2,6 @@ package com.hiyama.anpikakuninproject.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -189,7 +188,7 @@ class LoginActivity : AppCompatActivity() {
 
     @UiThread
     private fun getInfo(): String{
-        var result = ""
+        var result: String
         runBlocking {
             result = commServer.getInfoBackGroundRunner("UTF-8")
             Log.i("GET",result)
@@ -200,7 +199,7 @@ class LoginActivity : AppCompatActivity() {
     @UiThread
     private fun postInfo(): String{ //posttest
         val postTxt = findViewById<TextView>(R.id.postText)
-        var result = ""
+        var result: String
         runBlocking { // postして結果が返ってくるまで待機
             result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
@@ -211,7 +210,7 @@ class LoginActivity : AppCompatActivity() {
 
     @UiThread
     private fun loginInfo(): String{ //posttest
-        var result = ""
+        var result: String
         runBlocking { // postして結果が返ってくるまで待機
             result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
