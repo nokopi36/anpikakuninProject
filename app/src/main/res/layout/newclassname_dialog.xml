@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="曜日"
+                android:text="@string/dayOfWeek"
                 android:textSize="20sp"/>
 
             <Spinner
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="時間"
+                android:text="@string/classTime"
                 android:textSize="20sp"/>
 
             <Spinner
@@ -58,7 +58,9 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:id="@+id/className"
-            android:hint="科目名"/>
+            android:hint="@string/className"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor,TextFields"/>
 
     </LinearLayout>
 
@@ -71,7 +73,9 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:id="@+id/lectureLocation"
-            android:hint="講義室"/>
+            android:hint="@string/lectureLocation"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor,TextFields"/>
 
     </LinearLayout>
 

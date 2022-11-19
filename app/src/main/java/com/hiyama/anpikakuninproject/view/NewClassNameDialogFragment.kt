@@ -2,8 +2,6 @@ package com.hiyama.anpikakuninproject.view
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,10 +11,9 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import com.hiyama.anpikakuninproject.R
-import com.hiyama.anpikakuninproject.activity.ScheduleFragment
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 
-class CustomDialogFragment: DialogFragment() {
+class NewClassNameDialogFragment: DialogFragment() {
     private val dayOfWeekSpinner = arrayOf(
         "月曜日",
         "火曜日",
@@ -38,8 +35,8 @@ class CustomDialogFragment: DialogFragment() {
             val builder = AlertDialog.Builder(it)
 
             //Dialogレイアウトにviewを取得
-            val inflater = requireActivity().layoutInflater;
-            val root = inflater.inflate(R.layout.custom_dialog, null)
+            val inflater = requireActivity().layoutInflater
+            val root = inflater.inflate(R.layout.newclassname_dialog, null)
 
             val classNameEditText = root.findViewById<EditText>(R.id.className)
             val lectureLocationEditText = root.findViewById<EditText>(R.id.lectureLocation)

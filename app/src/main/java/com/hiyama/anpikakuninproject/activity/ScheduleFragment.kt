@@ -9,15 +9,14 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
-import com.hiyama.anpikakuninproject.view.CustomDialogFragment
-import java.io.File
+import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
 
 class ScheduleFragment : Fragment() {
 
 //    private val fileName = "Schedule.txt"
 //    var file = File(requireContext().filesDir, fileName)
 
-    val customDialog = CustomDialogFragment()
+    private val newClassNameDialog = NewClassNameDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -25,8 +24,8 @@ class ScheduleFragment : Fragment() {
 
         val newClassBtn = fragmentView.findViewById<Button>(R.id.newClass)
         newClassBtn.setOnClickListener {
-            fragmentManager?.run {
-                customDialog.show(this, "test")
+            parentFragment?.run {
+                newClassNameDialog.show(childFragmentManager, "newClass")
             }
         }
 
