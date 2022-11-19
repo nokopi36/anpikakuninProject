@@ -18,4 +18,10 @@
     <string name="newPassword">新しいパスワード</string>
     <string name="oldPassword">現在のパスワード</string>
     <string name="changePassword">パスワード変更</string>
+    <string name="dayOfWeek">曜日</string>
+    <string name="classTime">時間</string>
+    <string name="className">科目名</string>
+    <string name="lectureLocation">講義室</string>
+    <string name="buttonTitle">登録名</string>
+    <string name="url">URL</string>
 </resources>

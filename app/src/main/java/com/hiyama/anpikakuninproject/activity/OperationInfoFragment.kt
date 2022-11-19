@@ -14,12 +14,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class OperationInfoFragment : Fragment() {
 
     val commServer = CommServer()
+    private val newOperationDialog = NewOperationDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -37,7 +39,12 @@ class OperationInfoFragment : Fragment() {
             startActivity(intent)
         }
 
-
+        val createBtn = fragmentView.findViewById<Button>(R.id.createBtn)
+        createBtn.setOnClickListener {
+            parentFragment.run {
+                newOperationDialog.show(childFragmentManager, "newOperation")
+            }
+        }
 
         return fragmentView
 
