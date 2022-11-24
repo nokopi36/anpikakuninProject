@@ -28,4 +28,4 @@
 ## PasswordActivity
 パスワードを変更する画面
 
-#test
+#testを削除
