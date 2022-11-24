@@ -42,6 +42,31 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.passWord)
         val testTxt = findViewById<TextView>(R.id.testText)
 
+        /*------------------ここからpush通知に関すること------------------*/
+        // インスタンスIDの自動生成を有効化する場合、true
+        // AndroidManifestにて自動生成を禁止にしていない場合、不要
+//        FirebaseMessaging.getInstance().isAutoInitEnabled = true
+
+        // Current Notificationトークンの取得
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    // token取得失敗
+                    Log.d("getInstanceId failed ${task.exception}", "a")
+                    return@OnCompleteListener
+                }
+
+                // new Instance ID token
+                // ここで取得したtokenをテストする際のインスタンスIDとして設定する
+                val token = task.result
+                UserInfo.fcmToken = token
+
+                val msg = "InstanceID Token: $token"
+                Log.d("msg",msg)
+//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
+        /*------------------ここまで------------------*/
+
         safetyCheckActivity()
         autoLogin()
 
@@ -76,32 +101,6 @@ class LoginActivity : AppCompatActivity() {
             commServer.setURL(CommServer.POSTTEST)
             postTest()
         }
-
-        /*------------------ここからpush通知に関すること------------------*/
-        // インスタンスIDの自動生成を有効化する場合、true
-        // AndroidManifestにて自動生成を禁止にしていない場合、不要
-//        FirebaseMessaging.getInstance().isAutoInitEnabled = true
-
-        // Current Notificationトークンの取得
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    // token取得失敗
-                    Log.d("getInstanceId failed ${task.exception}", "a")
-                    return@OnCompleteListener
-                }
-
-                // new Instance ID token
-                // ここで取得したtokenをテストする際のインスタンスIDとして設定する
-                val token = task.result
-                UserInfo.fcmToken = token
-
-                val msg = "InstanceID Token: $token"
-                Log.d("msg",msg)
-//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            })
-        /*------------------ここまで------------------*/
-
     }
 
     private fun login(): Boolean {
@@ -267,6 +266,7 @@ class LoginActivity : AppCompatActivity() {
         } else {
             UserInfo.userName = savedUserName!!
             UserInfo.password = hashSHA256String(savedPassWord!!)
+//            UserInfo.fcmToken =
             commServer.setURL(CommServer.LOGIN)
             login()
         }

@@ -20,7 +20,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_baseline_call_24" />
+            android:resource="@drawable/ic_notifications_black_24dp" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"

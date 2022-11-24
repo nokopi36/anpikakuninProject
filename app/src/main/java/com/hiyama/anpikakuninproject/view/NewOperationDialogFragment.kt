@@ -24,16 +24,16 @@ class NewOperationDialogFragment: DialogFragment() {
 
             //DialogBuilderにdialogのviewをセット
             builder.setView(root)
-                //OKボタン
-                .setPositiveButton("OK") { _, _ ->
+                //追加ボタン
+                .setPositiveButton("追加") { _, _ ->
                     val buttonTitle = buttonTitleEditText.text.toString()
                     val url = urlEditText.text.toString()
                     OperationInfo.buttonTitle = buttonTitle
                     OperationInfo.url = url
                     Log.i(">>>", "Info.buttonTitle:${OperationInfo.buttonTitle}, Info.url:${OperationInfo.url}")
                 }
-                //cancelボタン
-                .setNegativeButton("CANCEL") { dialog, _ ->
+                //キャンセルボタン
+                .setNegativeButton("キャンセル") { dialog, _ ->
                     //dialogを閉じる
                     dialog.cancel()
                 }
