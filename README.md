@@ -27,3 +27,5 @@
 
 ## PasswordActivity
 パスワードを変更する画面
+
+#test
