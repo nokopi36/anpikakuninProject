@@ -75,8 +75,8 @@ class NewClassNameDialogFragment: DialogFragment() {
 
             //DialogBuilderにdialogのviewをセット
             builder.setView(root)
-                //OKボタン
-                .setPositiveButton("OK") { _, _ ->
+                //登録ボタン
+                .setPositiveButton("登録") { _, _ ->
                     val className = classNameEditText.text.toString()
                     val lectureLocation = lectureLocationEditText.text.toString()
                     ScheduleInfo.className = className
@@ -84,8 +84,8 @@ class NewClassNameDialogFragment: DialogFragment() {
                     Log.i(">>>", "className:$className, lectureLocation:$lectureLocation")
                     Log.i(">>>", "Info.className:${ScheduleInfo.className}, Info.lectureLocation:${ScheduleInfo.lectureLocation}")
                 }
-                //cancelボタン
-                .setNegativeButton("CANCEL") { dialog, _ ->
+                //キャンセルボタン
+                .setNegativeButton("キャンセル") { dialog, _ ->
                     //dialogを閉じる
                     dialog.cancel()
                 }
