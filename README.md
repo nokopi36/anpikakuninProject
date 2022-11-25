@@ -30,3 +30,6 @@
 
 #test
 #aaaaa
+
+# test amano
+amano test
