@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.room.Room
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.data.Lecture
+import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
 
@@ -33,6 +36,14 @@ class ScheduleFragment : Fragment() {
         updateBtn.setOnClickListener {
             Log.i(">>>", "dayOfWeek:${ScheduleInfo.dayOfweek}, classTime:${ScheduleInfo.classTime}")
             Log.i(">>>", "className:${ScheduleInfo.className}, lectureLocation:${ScheduleInfo.lectureLocation}")
+
+            val db = Room.databaseBuilder(
+                requireContext(),
+                ScheduleDB::class.java, "database-name"
+            ).build()
+
+            val classDao = db.lecturesDao()
+            val lectures: List<Lecture> = classDao.getAllLectures()
         }
 
 
