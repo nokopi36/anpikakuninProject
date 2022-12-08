@@ -13,6 +13,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
+        android:id="@+id/loginForm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -56,6 +57,28 @@
     </LinearLayout>
 
 <!--    以下テスト用View     -->
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testServerIP"
+        android:hint="@string/testServerIpText"
+        app:layout_constraintTop_toBottomOf="@id/loginForm"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testServerPort"
+        android:hint="@string/testServerPortText"
+        app:layout_constraintTop_toBottomOf="@id/testServerIP"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields"/>
 
     <Button
         android:layout_width="wrap_content"

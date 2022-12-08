@@ -67,14 +67,16 @@ class LoginActivity : AppCompatActivity() {
             })
         /*------------------ここまで------------------*/
 
-        safetyCheckActivity()
-        autoLogin()
+        /*以下2つはtestServerに接続するときはコメントアウトする*/
+//        safetyCheckActivity()
+//        autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
             val userName = userNameEditText.text.toString()
             val passWord = passwordEditText.text.toString()
-            if (checkCorrectEntered(userName, passWord)){
+            if (checkCorrectEntered(userName, passWord) && testServerLogin()){ // testServerに接続しないときはコメントアウトして下の行を有効化する
+//            if (checkCorrectEntered(userName, passWord)){
                 UserInfo.userName = userName
                 UserInfo.password = hashSHA256String(passWord)
                 sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
@@ -269,6 +271,27 @@ class LoginActivity : AppCompatActivity() {
 //            UserInfo.fcmToken =
             commServer.setURL(CommServer.LOGIN)
             login()
+        }
+    }
+
+    // testServerに接続するときに使う関数
+    private fun testServerLogin(): Boolean{
+        val testServerIP = findViewById<EditText>(R.id.testServerIP)
+        val testServerPort = findViewById<EditText>(R.id.testServerPort)
+        return if (testServerIP.text.toString().isEmpty() && testServerPort.text.toString().isEmpty()){
+            CommServer.ipAddress = "160.248.2.236"
+            CommServer.port = "3000"
+            true
+        } else if (testServerIP.text.toString().isEmpty() || testServerPort.text.toString().isEmpty()){
+            AlertDialog.Builder(this)
+                .setMessage("IPもしくはPortが入力されていません")
+                .setPositiveButton("OK") { _, _ -> }
+                .show()
+            false
+        } else {
+            CommServer.ipAddress = testServerIP.text.toString()
+            CommServer.port = testServerPort.text.toString()
+            true
         }
     }
 

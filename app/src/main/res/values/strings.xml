@@ -24,4 +24,6 @@
     <string name="lectureLocation">講義室</string>
     <string name="buttonTitle">登録名</string>
     <string name="url">URL</string>
+    <string name="testServerIpText">TestServerIP</string>
+    <string name="testServerPortText">testServerPort</string>
 </resources>
