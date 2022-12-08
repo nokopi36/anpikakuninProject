@@ -13,25 +13,17 @@
 ## OperationInfoFragment
 バスや電車といった何かしらの運行情報を見ることができる画面
 
-「くるけん」等といったサイトを自分で登録してボタンを追加できると良いなと考え中
+「くるけん」等といったサイトを自分で登録してボタンを追加
 
 ![operationSample](https://user-images.githubusercontent.com/94427199/202617932-63d3889b-c024-4440-9504-eebcc52dcd40.png)
 
 ## ScheduleFragment
 個人の現在の時間割を見ることができる画面
 
-サーバからGETで取得して表示するのか、時間割アプリみたいに自分で登録して保存するのかは悩み中
+時間割アプリみたいに自分で登録して保存
 
 ## LoginActivity
 上記4画面に行くために学籍番号、パスワードを入力してログインする画面
 
 ## PasswordActivity
 パスワードを変更する画面
-
-#test
-#aaaaa
-
-aaaaaa
-iiiiii
-# test amano
-amano test
