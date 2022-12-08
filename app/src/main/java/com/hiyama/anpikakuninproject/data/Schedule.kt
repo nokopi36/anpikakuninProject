@@ -13,13 +13,13 @@ data class Lecture(
 @Dao
 interface LecturesDao {
     @Query("SELECT * FROM lecture")
-    fun getAllLectures(): List<Lecture>
+    suspend fun getAllLectures(): List<Lecture>
 
     @Insert
-    fun insert(vararg lecturesInfo: Lecture)
+    suspend fun insert(vararg lecturesInfo: Lecture)
 
     @Delete
-    fun delete(lectureInfo: Lecture)
+    suspend fun delete(lectureInfo: Lecture)
 }
 
 @Database(entities = [Lecture::class], version = 1)
