@@ -39,6 +39,8 @@ class ScheduleFragment : Fragment() {
             Log.i(">>>", "dayOfWeek:${ScheduleInfo.dayOfweek}, classTime:${ScheduleInfo.classTime}")
             Log.i(">>>", "className:${ScheduleInfo.className}, lectureLocation:${ScheduleInfo.lectureLocation}")
 
+            val lecture = Lecture(ScheduleInfo.className, ScheduleInfo.dayOfweek, ScheduleInfo.classTime[0].digitToInt(), ScheduleInfo.lectureLocation)
+
             val db = Room.databaseBuilder(
                 requireContext(),
                 ScheduleDB::class.java, "database-name"
@@ -47,10 +49,40 @@ class ScheduleFragment : Fragment() {
             val classDao = db.lecturesDao()
 
             lifecycle.coroutineScope.launch{
-                val lectures: List<Lecture> = classDao.getAllLectures()
+//                val lectures: List<Lecture> = classDao.getAllLectures()
+                classDao.insert(lecture)
             }
         }
 
+        val deleteBtn = fragmentView.findViewById<Button>(R.id.deleteBtn)
+        deleteBtn.setOnClickListener {
+            val db = Room.databaseBuilder(
+                requireContext(),
+                ScheduleDB::class.java, "database-name"
+            ).build()
+
+            val classDao = db.lecturesDao()
+
+            lifecycle.coroutineScope.launch{
+                classDao.deleteAll()
+            }
+        }
+
+        val db = Room.databaseBuilder(
+            requireContext(),
+            ScheduleDB::class.java, "database-name"
+        ).build()
+
+        val classDao = db.lecturesDao()
+
+        lifecycle.coroutineScope.launch {
+            classDao.getAllLectures().collect { lecturesList ->
+                lecturesList.forEach {
+                    Log.i(">>>", "DB dayOfWeek:${it.dayOfWeek}, lectureTime:${it.lectureTime}")
+                    Log.i(">>>", "DB lectureName:${it.lectureName}, lectureLocation:${it.lectureLocation}")
+                }
+            }
+        }
 
         return fragmentView
     }
