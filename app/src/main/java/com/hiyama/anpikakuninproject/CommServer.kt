@@ -37,10 +37,13 @@ class CommServer {
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
 
+        var ipAddress = "160.248.2.236"
+        var port = "3000"
+
     }
 
-    private val ipAddress = "160.248.2.236"
-    private val port = "3000"
+//    private val ipAddress = "160.248.2.236"
+//    private val port = "3000"
     private var request = ""
     private var url = ""
     private var postData = ""
