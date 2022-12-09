@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class Lecture(
-    @PrimaryKey val lectureName: String,
+    @PrimaryKey(autoGenerate = true) val lectureID: Int = 0,
+    @ColumnInfo val lectureName: String,
     @ColumnInfo val dayOfWeek: String,
     @ColumnInfo val lectureTime: Int,
     @ColumnInfo val lectureLocation: String?
@@ -13,7 +14,8 @@ data class Lecture(
 
 @Dao
 interface LecturesDao {
-    @Query("SELECT * FROM lecture")
+    @Query("SELECT * FROM lecture " +
+            "ORDER BY dayOfWeek ASC, lectureTime ASC")
     fun getAllLectures(): Flow<List<Lecture>>
 
     @Insert
