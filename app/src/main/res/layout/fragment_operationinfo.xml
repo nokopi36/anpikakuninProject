@@ -67,13 +67,35 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addLinearLayout"
+        app:layout_constraintTop_toBottomOf="@id/numata"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/createBtn"
         android:text="ボタン追加"
-        app:layout_constraintTop_toBottomOf="@id/numata"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_weight="@integer/material_motion_duration_long_1"
+        app:layout_constraintTop_toBottomOf="@id/addLinearLayout"
+        app:layout_constraintRight_toLeftOf="@id/updateBtn"
         app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/updateBtn"
+        android:text="更新"
+        app:layout_constraintHorizontal_weight="@integer/material_motion_duration_long_1"
+        app:layout_constraintTop_toBottomOf="@id/addLinearLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/createBtn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

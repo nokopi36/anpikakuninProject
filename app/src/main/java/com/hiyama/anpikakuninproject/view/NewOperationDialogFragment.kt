@@ -28,8 +28,8 @@ class NewOperationDialogFragment: DialogFragment() {
                 .setPositiveButton("追加") { _, _ ->
                     val buttonTitle = buttonTitleEditText.text.toString()
                     val url = urlEditText.text.toString()
-                    OperationInfo.buttonTitle = buttonTitle
-                    OperationInfo.url = url
+                    OperationInfo.buttonTitle.add(buttonTitle)
+                    OperationInfo.url.add(url)
                     Log.i(">>>", "Info.buttonTitle:${OperationInfo.buttonTitle}, Info.url:${OperationInfo.url}")
                 }
                 //キャンセルボタン
