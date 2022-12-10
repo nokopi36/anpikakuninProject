@@ -3,6 +3,7 @@ package com.hiyama.anpikakuninproject.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,9 +52,15 @@ class OperationInfoFragment : Fragment() {
 
         val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
         updateBtn.setOnClickListener {
+            addLinearLayout.removeAllViews()
             for ( (index, elem) in OperationInfo.buttonTitle.withIndex()){
                 val button = Button(context)
                 button.text = OperationInfo.buttonTitle[index]
+                button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                button.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(OperationInfo.url[index]))
+                    startActivity(intent)
+                }
                 addLinearLayout.addView(button)
             }
         }
