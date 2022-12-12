@@ -1,6 +1,6 @@
 package com.hiyama.anpikakuninproject.data
 
 object OperationInfo {
-    var buttonTitle = ""
-    var url = ""
+    var buttonTitle = arrayListOf<String>()
+    var url = arrayListOf<String>()
 }
