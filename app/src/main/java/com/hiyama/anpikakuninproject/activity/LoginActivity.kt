@@ -73,19 +73,21 @@ class LoginActivity : AppCompatActivity() {
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
-            val userName = userNameEditText.text.toString()
-            val passWord = passwordEditText.text.toString()
-            if (checkCorrectEntered(userName, passWord) && testServerLogin()){ // testServerに接続しないときはコメントアウトして下の行を有効化する
-//            if (checkCorrectEntered(userName, passWord)){
-                UserInfo.userName = userName
-                UserInfo.password = hashSHA256String(passWord)
-                sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
-                sharedPreferences.edit().putString("password", passWord).apply()
-                commServer.setURL(CommServer.LOGIN)
-                if (!login()){
-                    passwordEditText.text.clear()
-                }
-            }
+//            val userName = userNameEditText.text.toString()
+//            val passWord = passwordEditText.text.toString()
+//            if (checkCorrectEntered(userName, passWord) && testServerLogin()){ // testServerに接続しないときはコメントアウトして下の行を有効化する
+////            if (checkCorrectEntered(userName, passWord)){
+//                UserInfo.userName = userName
+//                UserInfo.password = hashSHA256String(passWord)
+//                sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
+//                sharedPreferences.edit().putString("password", passWord).apply()
+//                commServer.setURL(CommServer.LOGIN)
+//                if (!login()){
+//                    passwordEditText.text.clear()
+//                }
+//            }
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             overridePendingTransition(0,0)
         }
 

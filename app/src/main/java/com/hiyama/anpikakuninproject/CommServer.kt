@@ -1,9 +1,7 @@
 package com.hiyama.anpikakuninproject
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.appcompat.app.AlertDialog
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hiyama.anpikakuninproject.data.LoginInfo
 import com.hiyama.anpikakuninproject.data.PassWord
@@ -44,6 +42,11 @@ class CommServer {
 
 //    private val ipAddress = "160.248.2.236"
 //    private val port = "3000"
+
+//    本番用のipAddress
+//    private val ipAddress = "13.114.63.159"
+//    private val port = "3000"
+
     private var request = ""
     private var url = ""
     private var postData = ""
@@ -75,7 +78,8 @@ class CommServer {
                 Log.i("postData", postData)
             }
             SCHEDULE -> {
-                url = ""
+                setRequest(GET)
+                url = "http://$ipAddress:$port/api/timetable"
             }
             OPERATIONINFO -> {
                 url = ""
