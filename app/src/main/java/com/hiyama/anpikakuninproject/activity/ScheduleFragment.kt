@@ -100,9 +100,9 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun initScheduleTable(scheduleTableLayout : TableLayout) : List<List<TextView>>{
-        val weekList : List<String> = listOf("", "月", "火", "水", "木", "金")
+        val weekList : List<String> = listOf("月", "火", "水", "木", "金")
         scheduleTableLayout.addView(TableRow(requireContext()).also{
-            for(day in weekList){
+            for(day in listOf("") + weekList){
                 val cell = TextView(requireContext()).also { textview ->
                     textview.text = day
                     textview.gravity = Gravity.CENTER
