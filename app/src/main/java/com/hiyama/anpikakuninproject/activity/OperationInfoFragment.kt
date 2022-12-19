@@ -51,6 +51,7 @@ class OperationInfoFragment : Fragment() {
         createBtn.setOnClickListener {
             parentFragment.run {
                 newOperationDialog.show(childFragmentManager, "newOperation")
+                addButton(addLinearLayout)
             }
         }
 
@@ -109,6 +110,12 @@ class OperationInfoFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        saveButtonData("buttonTitle", OperationInfo.buttonTitle)
+        saveButtonData("buttonUrl", OperationInfo.url)
+    }
+
+    override fun onPause() {
+        super.onPause()
         saveButtonData("buttonTitle", OperationInfo.buttonTitle)
         saveButtonData("buttonUrl", OperationInfo.url)
     }
