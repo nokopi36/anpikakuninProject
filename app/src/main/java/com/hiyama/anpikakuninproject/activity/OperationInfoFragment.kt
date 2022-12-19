@@ -1,25 +1,23 @@
 package com.hiyama.anpikakuninproject.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.OperationInfo
 import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
 
 class OperationInfoFragment : Fragment() {
 
@@ -30,6 +28,12 @@ class OperationInfoFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_operationinfo, container, false)
         val addLinearLayout = fragmentView.findViewById<LinearLayout>(R.id.addLinearLayout)
+
+        OperationInfo.buttonTitle = loadButtonData("buttonTitle")
+        OperationInfo.url = loadButtonData("buttonUrl")
+        Log.i("shared buttonTitle", OperationInfo.buttonTitle.toString())
+        Log.i("shared buttonUrl", OperationInfo.url.toString())
+        addButton(addLinearLayout)
 
         val hcuInfo = fragmentView.findViewById<Button>(R.id.hcu)
         hcuInfo.setOnClickListener {
@@ -52,7 +56,34 @@ class OperationInfoFragment : Fragment() {
 
         val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
         updateBtn.setOnClickListener {
-            addLinearLayout.removeAllViews()
+            addButton(addLinearLayout)
+        }
+
+        return fragmentView
+
+    }
+
+    private fun saveButtonData(key: String, arrayList: ArrayList<String>){
+        val sharedPreferences = activity?.getSharedPreferences("OperationInfoButton", Context.MODE_PRIVATE)
+        val jsonArray = JSONArray(arrayList)
+        sharedPreferences?.edit()?.putString(key, jsonArray.toString())?.apply()
+    }
+
+    private fun loadButtonData(key: String): ArrayList<String>{
+        val sharedPreferences = activity?.getSharedPreferences("OperationInfoButton", Context.MODE_PRIVATE)
+        val jsonArray = JSONArray(sharedPreferences?.getString(key, "[]"))
+        val arrayList = arrayListOf<String>()
+        for (i in 0 until jsonArray.length()) {
+            arrayList.add(jsonArray.get(i) as String)
+        }
+        return arrayList
+    }
+
+    private fun addButton(linearLayout: LinearLayout){
+        if (OperationInfo.buttonTitle.isEmpty()){
+            /* do nothing */
+        } else {
+            linearLayout.removeAllViews()
             for ( (index, elem) in OperationInfo.buttonTitle.withIndex()){
                 val button = Button(context)
                 button.text = OperationInfo.buttonTitle[index]
@@ -61,17 +92,14 @@ class OperationInfoFragment : Fragment() {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(OperationInfo.url[index]))
                     startActivity(intent)
                 }
-                addLinearLayout.addView(button)
+                linearLayout.addView(button)
             }
         }
-
-        return fragmentView
-
     }
 
     @UiThread
     private fun getInfo(): String{
-        var result = ""
+        var result: String
         runBlocking {
             result = commServer.getInfoBackGroundRunner("UTF-8")
             Log.i("GET",result)
@@ -81,5 +109,7 @@ class OperationInfoFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        saveButtonData("buttonTitle", OperationInfo.buttonTitle)
+        saveButtonData("buttonUrl", OperationInfo.url)
     }
 }
