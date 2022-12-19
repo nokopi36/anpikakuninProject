@@ -2,25 +2,25 @@ package com.hiyama.anpikakuninproject.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.room.Room
 import com.hiyama.anpikakuninproject.R
-import com.hiyama.anpikakuninproject.adapter.GridItemDecoration
-import com.hiyama.anpikakuninproject.adapter.ScheduleAdapter
-import com.hiyama.anpikakuninproject.adapter.ScheduleLabelAdapter
 import com.hiyama.anpikakuninproject.data.Lecture
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class ScheduleFragment : Fragment() {
 
@@ -32,18 +32,6 @@ class ScheduleFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_schedule, container, false)
-
-        val recyclerview = fragmentView.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerview.addItemDecoration(GridItemDecoration())
-        val gridLayoutManager = GridLayoutManager(requireContext(), 6, GridLayoutManager.HORIZONTAL, false)
-        val scheduleLabelAdapter = ScheduleLabelAdapter()
-        val scheduleAdapter = ScheduleAdapter()
-        val concatAdapter = ConcatAdapter().apply{
-            addAdapter(scheduleLabelAdapter)
-            addAdapter(scheduleAdapter)
-        }
-        recyclerview.layoutManager = gridLayoutManager
-        recyclerview.adapter = concatAdapter
 
         val db = Room.databaseBuilder(
             requireContext(),
@@ -64,7 +52,18 @@ class ScheduleFragment : Fragment() {
             Log.i(">>>", "dayOfWeek:${ScheduleInfo.dayOfweek}, classTime:${ScheduleInfo.classTime}")
             Log.i(">>>", "className:${ScheduleInfo.className}, lectureLocation:${ScheduleInfo.lectureLocation}")
 
-            val lecture = Lecture(0, ScheduleInfo.className, ScheduleInfo.dayOfweek, ScheduleInfo.classTime[0].digitToInt(), ScheduleInfo.lectureLocation)
+            val lecture = Lecture(0,
+                ScheduleInfo.className,
+                ScheduleInfo.dayOfweek,
+                ScheduleInfo.classTime[0].digitToInt(),
+                ScheduleInfo.lectureLocation.let{
+                    if(it == ""){
+                        null
+                    }else {
+                        it
+                    }
+                }
+            )
 
             if(ScheduleInfo.className != "") {
                 lifecycle.coroutineScope.launch {
@@ -80,11 +79,11 @@ class ScheduleFragment : Fragment() {
             }
         }
 
-        scheduleLabelAdapter.submitList(listOf("1", "2", "3", "4", "5", "6"))
+        val scheduleTable = initScheduleTable(fragmentView.findViewById<TableLayout>(R.id.schedule_table_layout))
 
         lifecycle.coroutineScope.launch {
             classDao.getAllLectures().collect { lecturesList ->
-                scheduleAdapter.submitList(customScheduleFormat(lecturesList))
+                setDataToTable(customScheduleFormat(lecturesList), scheduleTable)
 
                 lecturesList.forEach {
                     Log.i(">>>", "DB dayOfWeek:${it.dayOfWeek}, lectureTime:${it.lectureTime}")
@@ -96,24 +95,111 @@ class ScheduleFragment : Fragment() {
         return fragmentView
     }
 
-    private fun customScheduleFormat(scheduleData : List<Lecture>) : List<Lecture>{
+    private fun dpToPx(dp : Float) : Int{
+        return (dp * requireContext().resources.displayMetrics.density).roundToInt()
+    }
+
+    private fun initScheduleTable(scheduleTableLayout : TableLayout) : List<List<TextView>>{
+        val weekList : List<String> = listOf("", "月", "火", "水", "木", "金")
+        scheduleTableLayout.addView(TableRow(requireContext()).also{
+            for(day in weekList){
+                val cell = TextView(requireContext()).also { textview ->
+                    textview.text = day
+                    textview.gravity = Gravity.CENTER
+                    val layoutParams = TableRow.LayoutParams()
+                    if(day != "") {
+                        textview.background = requireContext().getDrawable(R.color.purple_200)
+                        layoutParams.weight = 1F
+                        layoutParams.width = 0
+                        layoutParams.marginStart = dpToPx(0.5f)
+                        layoutParams.marginEnd = dpToPx(0.5f)
+                    } else {
+                        layoutParams.width = dpToPx(32f)
+                    }
+                    textview.layoutParams = layoutParams
+                }
+                it.addView(cell)
+            }
+        })
+
+        val scheduleTable = mutableListOf<MutableList<TextView>>()
+        for(time in 1..6){
+            val row = mutableListOf<TextView>()
+            scheduleTableLayout.addView(TableRow(requireContext()).also{
+                val rowLayoutParams = TableLayout.LayoutParams()
+                rowLayoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+                rowLayoutParams.topMargin = dpToPx(2f)
+                it.layoutParams = rowLayoutParams
+
+                it.addView(TextView(requireContext()).also { textview ->
+                    textview.text = time.toString()
+                    textview.background = requireContext().getDrawable(R.color.purple_200)
+                    textview.gravity = Gravity.CENTER
+
+                    val layoutParams = TableRow.LayoutParams()
+                    layoutParams.width = dpToPx(32f)
+                    layoutParams.height = LinearLayout.LayoutParams.MATCH_PARENT
+                    layoutParams.gravity = Gravity.CENTER_VERTICAL
+                    textview.layoutParams = layoutParams
+                })
+
+                for(date in 1..weekList.size){
+                    val cell = TextView(requireContext()).also { textview ->
+                        textview.text = ""
+                        textview.background = requireContext().getDrawable(R.color.lemonchiffon)
+                        textview.gravity = Gravity.CENTER
+                        val layoutParams = TableRow.LayoutParams()
+                        layoutParams.weight = 1F
+                        layoutParams.width = 0
+                        layoutParams.height = LinearLayout.LayoutParams.MATCH_PARENT
+                        layoutParams.marginStart = dpToPx(1f)
+                        layoutParams.marginEnd = dpToPx(1f)
+                        layoutParams.gravity = Gravity.CENTER_VERTICAL
+                        textview.layoutParams = layoutParams
+                    }
+                    row.add(cell)
+                    it.addView(cell)
+                }
+            }, time)
+            scheduleTable.add(row)
+        }
+        return scheduleTable
+    }
+
+    private fun customScheduleFormat(scheduleData : List<Lecture>) : List<List<Lecture>>{
         val weekList : List<String> = listOf("月曜日", "火曜日", "水曜日", "木曜日", "金曜日")
-        val timeTable = mutableListOf<Lecture>()
-        for(i in 1..weekList.size*6){
-            timeTable.add(Lecture(0,"","",0,""))
+        val timeTable = mutableListOf<MutableList<Lecture>>()
+        for(time in 1..6){
+            val scheduleRow = mutableListOf<Lecture>()
+            for(day in weekList) {
+                scheduleRow.add(Lecture(0, "", "", 0, ""))
+            }
+            timeTable.add(scheduleRow)
         }
 
         for(lecture in scheduleData) {
-            for (day in weekList.indices) {
-                for (time in 1..6) {
-                    if(lecture.dayOfWeek==weekList[day] && lecture.lectureTime==time) {
+            for (time in 1..6) {
+                for (day in weekList.indices) {
+                    if (lecture.dayOfWeek == weekList[day] && lecture.lectureTime == time) {
                         Log.i(">>>", "compare")
-                        timeTable[day * 6 + time-1] = lecture.copy()
+                        timeTable[time-1][day] = lecture.copy()
                     }
                 }
             }
         }
+
         return timeTable
+    }
+
+    private fun setDataToTable(scheduleData : List<List<Lecture>>, scheduleTable : List<List<TextView>>) {
+        for (rowIdx in scheduleData.indices) {
+            for (itemIdx in scheduleData[rowIdx].indices) {
+                val lectureLocation = scheduleData[rowIdx][itemIdx].lectureLocation ?: "未登録"
+
+                scheduleTable[rowIdx][itemIdx].text =
+                    scheduleData[rowIdx][itemIdx].lectureName + "\n" + lectureLocation
+            }
+        }
     }
 
     //    override fun onCreate(savedInstanceState: Bundle?) {
