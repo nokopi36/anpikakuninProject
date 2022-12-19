@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.annotation.UiThread
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
@@ -19,7 +20,7 @@ import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 
-class OperationInfoFragment : Fragment() {
+class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener {
 
     val commServer = CommServer()
     private val newOperationDialog = NewOperationDialogFragment()
@@ -51,14 +52,13 @@ class OperationInfoFragment : Fragment() {
         createBtn.setOnClickListener {
             parentFragment.run {
                 newOperationDialog.show(childFragmentManager, "newOperation")
-                addButton(addLinearLayout)
             }
         }
 
-        val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
-        updateBtn.setOnClickListener {
-            addButton(addLinearLayout)
-        }
+//        val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
+//        updateBtn.setOnClickListener {
+//            addButton(addLinearLayout)
+//        }
 
         return fragmentView
 
@@ -85,7 +85,7 @@ class OperationInfoFragment : Fragment() {
             /* do nothing */
         } else {
             linearLayout.removeAllViews()
-            for ( (index, elem) in OperationInfo.buttonTitle.withIndex()){
+            for ( (index, _) in OperationInfo.buttonTitle.withIndex()){
                 val button = Button(context)
                 button.text = OperationInfo.buttonTitle[index]
                 button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -106,6 +106,12 @@ class OperationInfoFragment : Fragment() {
             Log.i("GET",result)
         }
         return result
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment){
+        val addLinearLayout = view?.findViewById<LinearLayout>(R.id.addLinearLayout)
+        addLinearLayout?.let { addButton(it) }
+        Log.i("test", "dialog callback")
     }
 
     override fun onDestroyView() {
