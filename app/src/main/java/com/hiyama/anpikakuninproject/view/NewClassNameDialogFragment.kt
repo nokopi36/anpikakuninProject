@@ -28,6 +28,7 @@ class NewClassNameDialogFragment: DialogFragment() {
         "3限",
         "4限",
         "5限",
+        "6限"
     )
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
