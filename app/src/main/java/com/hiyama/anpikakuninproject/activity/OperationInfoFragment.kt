@@ -17,13 +17,15 @@ import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.OperationInfo
 import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
+import com.hiyama.anpikakuninproject.view.OperationDeleteBtnDialogFragment
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 
-class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener {
+class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener, OperationDeleteBtnDialogFragment.OperationDeleteBtnDialogListener {
 
     val commServer = CommServer()
     private val newOperationDialog = NewOperationDialogFragment()
+    private val operationDeleteBtnDialog = OperationDeleteBtnDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -55,10 +57,12 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
             }
         }
 
-//        val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
-//        updateBtn.setOnClickListener {
-//            addButton(addLinearLayout)
-//        }
+        val deleteBtn = fragmentView.findViewById<Button>(R.id.deleteBtn)
+        deleteBtn.setOnClickListener {
+            parentFragment.run {
+                operationDeleteBtnDialog.show(childFragmentManager, "deleteBtn")
+            }
+        }
 
         return fragmentView
 
@@ -81,8 +85,9 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
     }
 
     private fun addButton(linearLayout: LinearLayout){
-        if (OperationInfo.buttonTitle.isEmpty()){
+        if (OperationInfo.buttonTitle.isEmpty() || OperationInfo.url.isEmpty()){
             /* do nothing */
+            linearLayout.removeAllViews()
         } else {
             linearLayout.removeAllViews()
             for ( (index, _) in OperationInfo.buttonTitle.withIndex()){
@@ -112,6 +117,13 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
         val addLinearLayout = view?.findViewById<LinearLayout>(R.id.addLinearLayout)
         addLinearLayout?.let { addButton(it) }
         Log.i("test", "dialog callback")
+    }
+
+    override fun onDeleteBtnDialogPositiveClick(dialog: DialogFragment){
+        val addLinearLayout = view?.findViewById<LinearLayout>(R.id.addLinearLayout)
+        addLinearLayout?.let { addButton(it) }
+        Log.i("after deleteButtonTitle", OperationInfo.buttonTitle.toString())
+        Log.i("after deleteButtonUrl", OperationInfo.url.toString())
     }
 
     override fun onDestroyView() {
