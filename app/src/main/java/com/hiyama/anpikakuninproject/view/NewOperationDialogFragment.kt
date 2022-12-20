@@ -45,15 +45,23 @@ class NewOperationDialogFragment: DialogFragment() {
                             .setPositiveButton("OK") { _, _ -> }
                             .show()
                     } else {
-                        if (isValid(url)){
-                            OperationInfo.buttonTitle.add(buttonTitle)
-                            OperationInfo.url.add(url)
-                        } else {
+                        if (OperationInfo.buttonTitle.contains(buttonTitle) || OperationInfo.url.contains(url)){
                             androidx.appcompat.app.AlertDialog.Builder(activity!!)
                                 .setTitle("●追加失敗")
-                                .setMessage("URLが無効です")
+                                .setMessage("名前もしくはURLがすでに登録されています")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                        } else {
+                            if (isValid(url)){
+                                OperationInfo.buttonTitle.add(buttonTitle)
+                                OperationInfo.url.add(url)
+                            } else {
+                                androidx.appcompat.app.AlertDialog.Builder(activity!!)
+                                    .setTitle("●追加失敗")
+                                    .setMessage("URLが無効です")
+                                    .setPositiveButton("OK") { _, _ -> }
+                                    .show()
+                            }
                         }
                     }
                     listener?.onDialogPositiveClick(this)
