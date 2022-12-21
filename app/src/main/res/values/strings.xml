@@ -26,4 +26,7 @@
     <string name="url">URL</string>
     <string name="testServerIpText">TestServerIP</string>
     <string name="testServerPortText">testServerPort</string>
+    <string name="deleteBtn">ボタン削除</string>
+    <string name="createBtn">ボタン追加</string>
+    <string name="バス時刻表">バス時刻表</string>
 </resources>

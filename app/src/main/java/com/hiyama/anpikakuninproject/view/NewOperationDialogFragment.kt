@@ -2,6 +2,7 @@ package com.hiyama.anpikakuninproject.view
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -14,6 +15,12 @@ import java.net.MalformedURLException
 
 
 class NewOperationDialogFragment: DialogFragment() {
+
+    interface OperationDialogListener{
+        fun onDialogPositiveClick(dialog: DialogFragment)
+    }
+    var listener: OperationDialogListener? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -38,17 +45,26 @@ class NewOperationDialogFragment: DialogFragment() {
                             .setPositiveButton("OK") { _, _ -> }
                             .show()
                     } else {
-                        if (isValid(url)){
-                            OperationInfo.buttonTitle.add(buttonTitle)
-                            OperationInfo.url.add(url)
-                        } else {
+                        if (OperationInfo.buttonTitle.contains(buttonTitle) || OperationInfo.url.contains(url)){
                             androidx.appcompat.app.AlertDialog.Builder(activity!!)
                                 .setTitle("●追加失敗")
-                                .setMessage("URLが無効です")
+                                .setMessage("名前もしくはURLがすでに登録されています")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                        } else {
+                            if (isValid(url)){
+                                OperationInfo.buttonTitle.add(buttonTitle)
+                                OperationInfo.url.add(url)
+                            } else {
+                                androidx.appcompat.app.AlertDialog.Builder(activity!!)
+                                    .setTitle("●追加失敗")
+                                    .setMessage("URLが無効です")
+                                    .setPositiveButton("OK") { _, _ -> }
+                                    .show()
+                            }
                         }
                     }
+                    listener?.onDialogPositiveClick(this)
                     Log.i(">>>", "Info.buttonTitle:${OperationInfo.buttonTitle}, Info.url:${OperationInfo.url}")
                 }
                 //キャンセルボタン
@@ -65,6 +81,16 @@ class NewOperationDialogFragment: DialogFragment() {
             return URLUtil.isValidUrl(urlString) && Patterns.WEB_URL.matcher(urlString).matches()
         } catch (_: MalformedURLException) { }
         return false
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            val fragment = parentFragment
+            listener = fragment as OperationDialogListener
+        } catch (e: ClassCastException){
+            Log.e("OperationDialog", "no interface")
+        }
     }
 
 }
