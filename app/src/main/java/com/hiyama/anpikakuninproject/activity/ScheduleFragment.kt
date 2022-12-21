@@ -11,23 +11,27 @@ import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.Lecture
+import com.hiyama.anpikakuninproject.data.LecturesDao
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : Fragment(),
+    NewClassNameDialogFragment.NoticeDialogListener{
 
 //    private val fileName = "Schedule.txt"
 //    var file = File(requireContext().filesDir, fileName)
 
     private val newClassNameDialog = NewClassNameDialogFragment()
+    private lateinit var classDao : LecturesDao
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -38,37 +42,12 @@ class ScheduleFragment : Fragment() {
             ScheduleDB::class.java, "schedule-db"
         ).build()
 
-        val classDao = db.lecturesDao()
+        classDao = db.lecturesDao()
 
         val newClassBtn = fragmentView.findViewById<Button>(R.id.newClass)
         newClassBtn.setOnClickListener {
             parentFragment?.run {
                 newClassNameDialog.show(childFragmentManager, "newClass")
-            }
-        }
-
-        val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
-        updateBtn.setOnClickListener {
-            Log.i(">>>", "dayOfWeek:${ScheduleInfo.dayOfweek}, classTime:${ScheduleInfo.classTime}")
-            Log.i(">>>", "className:${ScheduleInfo.className}, lectureLocation:${ScheduleInfo.lectureLocation}")
-
-            val lecture = Lecture(0,
-                ScheduleInfo.className,
-                ScheduleInfo.dayOfweek,
-                ScheduleInfo.classTime[0].digitToInt(),
-                ScheduleInfo.lectureLocation.let{
-                    if(it == ""){
-                        null
-                    }else {
-                        it
-                    }
-                }
-            )
-
-            if(ScheduleInfo.className != "") {
-                lifecycle.coroutineScope.launch {
-                    classDao.insert(lecture)
-                }
             }
         }
 
@@ -100,9 +79,9 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun initScheduleTable(scheduleTableLayout : TableLayout) : List<List<TextView>>{
-        val weekList : List<String> = listOf("", "月", "火", "水", "木", "金")
+        val weekList : List<String> = listOf("月", "火", "水", "木", "金")
         scheduleTableLayout.addView(TableRow(requireContext()).also{
-            for(day in weekList){
+            for(day in listOf("") + weekList){
                 val cell = TextView(requireContext()).also { textview ->
                     textview.text = day
                     textview.gravity = Gravity.CENTER
@@ -198,6 +177,30 @@ class ScheduleFragment : Fragment() {
 
                 scheduleTable[rowIdx][itemIdx].text =
                     scheduleData[rowIdx][itemIdx].lectureName + "\n" + lectureLocation
+            }
+        }
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        Log.i(">>>", "dayOfWeek:${ScheduleInfo.dayOfweek}, classTime:${ScheduleInfo.classTime}")
+        Log.i(">>>", "className:${ScheduleInfo.className}, lectureLocation:${ScheduleInfo.lectureLocation}")
+
+        val lecture = Lecture(0,
+            ScheduleInfo.className,
+            ScheduleInfo.dayOfweek,
+            ScheduleInfo.classTime[0].digitToInt(),
+            ScheduleInfo.lectureLocation.let{
+                if(it == ""){
+                    null
+                }else {
+                    it
+                }
+            }
+        )
+
+        if(ScheduleInfo.className != "") {
+            lifecycle.coroutineScope.launch {
+                classDao.insert(lecture)
             }
         }
     }
