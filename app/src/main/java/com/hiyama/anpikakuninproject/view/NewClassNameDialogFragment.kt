@@ -31,6 +31,13 @@ class NewClassNameDialogFragment: DialogFragment() {
         "6限"
     )
 
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    interface NoticeDialogListener {
+        fun onDialogPositiveClick(dialog: DialogFragment)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -84,6 +91,19 @@ class NewClassNameDialogFragment: DialogFragment() {
                     ScheduleInfo.lectureLocation = lectureLocation
                     Log.i(">>>", "className:$className, lectureLocation:$lectureLocation")
                     Log.i(">>>", "Info.className:${ScheduleInfo.className}, Info.lectureLocation:${ScheduleInfo.lectureLocation}")
+
+                    // Verify that the host activity implements the callback interface
+                    try {
+                        // Instantiate the NoticeDialogListener so we can send events to the host
+                        val listener = parentFragmentManager.fragments.first() as? NoticeDialogListener
+                        // Send the positive button event back to the host activity
+                        listener?.onDialogPositiveClick(this)
+                    } catch (e: ClassCastException) {
+                        // The activity doesn't implement the interface, throw exception
+                        throw ClassCastException((parentFragmentManager.fragments.first()?.toString() +
+                                " must implement NoticeDialogListener"))
+                    }
+
                 }
                 //キャンセルボタン
                 .setNegativeButton("キャンセル") { dialog, _ ->
