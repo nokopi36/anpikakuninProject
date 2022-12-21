@@ -1,9 +1,12 @@
 package com.hiyama.anpikakuninproject
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -39,6 +42,18 @@ class MainActivity : AppCompatActivity() {
             R.id.changePassword -> {
                 val intent = Intent(this, PasswordActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.report -> {
+                AlertDialog.Builder(this)
+                    .setTitle("報告")
+                    .setMessage("不具合報告やその他報告はTwitterのDMへ")
+                    .setPositiveButton("Twitterへ") { _, _ ->
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/AppHcu?t=EmIIQJpOsAWvm85PPRPiAg&s=09"))
+                        startActivity(intent)
+                    }
+                    .show()
+                Log.i("aaa","aaaaaaa")
                 true
             }
             else -> super.onOptionsItemSelected(item)
