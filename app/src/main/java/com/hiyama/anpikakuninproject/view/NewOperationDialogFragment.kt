@@ -19,7 +19,7 @@ class NewOperationDialogFragment: DialogFragment() {
     interface OperationDialogListener{
         fun onDialogPositiveClick(dialog: DialogFragment)
     }
-    var listener: OperationDialogListener? = null
+    private var listener: OperationDialogListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
