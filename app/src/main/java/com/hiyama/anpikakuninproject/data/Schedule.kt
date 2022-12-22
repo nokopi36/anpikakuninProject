@@ -21,11 +21,15 @@ interface LecturesDao {
     @Insert
     suspend fun insert(vararg lecturesInfo: Lecture)
 
-    @Delete
-    suspend fun delete(lectureInfo: Lecture)
+//    @Delete
+//    suspend fun delete(lectureInfo: Lecture)
 
     @Query("DELETE FROM lecture")
     suspend fun deleteAll()
+
+    @Query("DELETE FROM lecture where dayOfWeek = :dayOfWeek and lectureTime = :lectureTime")
+    suspend fun deleteClass(dayOfWeek: String, lectureTime: Int)
+
 }
 
 @Database(entities = [Lecture::class], version = 1)

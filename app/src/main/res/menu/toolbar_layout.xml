@@ -8,4 +8,10 @@
         android:icon="@drawable/baseline_password_24"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/report"
+        android:title="@string/report"
+        android:icon="@drawable/baseline_report_problem_24"
+        app:showAsAction="never"/>
+
 </menu>

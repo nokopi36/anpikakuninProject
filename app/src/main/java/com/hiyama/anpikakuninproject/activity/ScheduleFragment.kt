@@ -21,16 +21,14 @@ import com.hiyama.anpikakuninproject.data.LecturesDao
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
+import com.hiyama.anpikakuninproject.view.ScheduleDeleteDialogFragment
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-class ScheduleFragment : Fragment(),
-    NewClassNameDialogFragment.NoticeDialogListener{
-
-//    private val fileName = "Schedule.txt"
-//    var file = File(requireContext().filesDir, fileName)
+class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogListener, ScheduleDeleteDialogFragment.ScheduleDeleteBtnDialogListener{
 
     private val newClassNameDialog = NewClassNameDialogFragment()
+    private val scheduleDeleteDialog = ScheduleDeleteDialogFragment()
     private lateinit var classDao : LecturesDao
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,12 +49,19 @@ class ScheduleFragment : Fragment(),
             }
         }
 
-        val deleteBtn = fragmentView.findViewById<Button>(R.id.deleteBtn)
-        deleteBtn.setOnClickListener {
-            lifecycle.coroutineScope.launch{
-                classDao.deleteAll()
+        val deleteClassBtn = fragmentView.findViewById<Button>(R.id.deleteClass)
+        deleteClassBtn.setOnClickListener {
+            parentFragment?.run {
+                scheduleDeleteDialog.show(childFragmentManager, "deleteClass")
             }
         }
+
+//        val deleteBtn = fragmentView.findViewById<Button>(R.id.deleteBtn)
+//        deleteBtn.setOnClickListener {
+//            lifecycle.coroutineScope.launch{
+//                classDao.deleteAll()
+//            }
+//        }
 
         val scheduleTable = initScheduleTable(fragmentView.findViewById<TableLayout>(R.id.schedule_table_layout))
 
@@ -204,6 +209,14 @@ class ScheduleFragment : Fragment(),
             }
         }
     }
+
+    override fun onDeleteBtnDialogPositiveClick(dialog: DialogFragment){
+        Log.i("in Callback", "DeleteClass")
+        lifecycle.coroutineScope.launch {
+            classDao.deleteClass(ScheduleInfo.dayOfweek, ScheduleInfo.classTime[0].digitToInt())
+        }
+    }
+
 
     //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)

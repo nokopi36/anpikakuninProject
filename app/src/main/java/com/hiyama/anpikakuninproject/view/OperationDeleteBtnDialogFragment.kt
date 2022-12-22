@@ -16,7 +16,7 @@ class OperationDeleteBtnDialogFragment: DialogFragment() {
     interface OperationDeleteBtnDialogListener{
         fun onDeleteBtnDialogPositiveClick(dialog: DialogFragment)
     }
-    var listener: OperationDeleteBtnDialogListener? = null
+    private var listener: OperationDeleteBtnDialogListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
