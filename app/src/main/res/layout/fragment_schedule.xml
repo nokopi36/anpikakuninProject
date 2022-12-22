@@ -35,25 +35,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-    <Button
-        android:id="@+id/deleteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="デバッグ用全削除"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newClass" />
+<!--    <Button-->
+<!--        android:id="@+id/deleteBtn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="デバッグ用全削除"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/newClass" />-->
 
     <Button
         android:id="@+id/newClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="講義登録"
+        android:text="@string/createClass"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/deleteClass"
         app:layout_constraintTop_toBottomOf="@+id/schedule_table_layout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteClass"
+        android:text="@string/deleteClass"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/newClass"
+        app:layout_constraintTop_toBottomOf="@+id/schedule_table_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

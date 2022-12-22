@@ -7,13 +7,12 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
 
-class NewClassNameDialogFragment: DialogFragment() {
+class ScheduleDeleteDialogFragment: DialogFragment() {
     private val dayOfWeekSpinner = arrayOf(
         "月曜日",
         "火曜日",
@@ -31,11 +30,8 @@ class NewClassNameDialogFragment: DialogFragment() {
         "6限"
     )
 
-    /* The activity that creates an instance of this dialog fragment must
-     * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it. */
-    interface NoticeDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
+    interface ScheduleDeleteBtnDialogListener{
+        fun onDeleteBtnDialogPositiveClick(dialog: DialogFragment)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -44,10 +40,7 @@ class NewClassNameDialogFragment: DialogFragment() {
 
             //Dialogレイアウトにviewを取得
             val inflater = requireActivity().layoutInflater
-            val root = inflater.inflate(R.layout.newclassname_dialog, null)
-
-            val classNameEditText = root.findViewById<EditText>(R.id.className)
-            val lectureLocationEditText = root.findViewById<EditText>(R.id.lectureLocation)
+            val root = inflater.inflate(R.layout.scheduledelete_dialog, null)
 
             val dayOfWeek = root.findViewById<Spinner>(R.id.dayOfWeek)
             val dayOfWeekAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, dayOfWeekSpinner)
@@ -58,7 +51,6 @@ class NewClassNameDialogFragment: DialogFragment() {
                     val text = p0?.selectedItem as String
                     ScheduleInfo.dayOfweek = text
                     Log.i("itemSelected", text)
-
                 }
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     /* do nothing */
@@ -84,22 +76,11 @@ class NewClassNameDialogFragment: DialogFragment() {
             //DialogBuilderにdialogのviewをセット
             builder.setView(root)
                 //登録ボタン
-                .setPositiveButton("登録") { _, _ ->
-                    val className = classNameEditText.text.toString()
-                    val lectureLocation = lectureLocationEditText.text.toString()
-                    ScheduleInfo.className = className
-                    ScheduleInfo.lectureLocation = lectureLocation
-                    Log.i(">>>", "className:$className, lectureLocation:$lectureLocation")
-                    Log.i(">>>", "Info.className:${ScheduleInfo.className}, Info.lectureLocation:${ScheduleInfo.lectureLocation}")
-
-                    // Verify that the host activity implements the callback interface
+                .setPositiveButton("削除") { _, _ ->
                     try {
-                        // Instantiate the NoticeDialogListener so we can send events to the host
-                        val listener = parentFragmentManager.fragments.first() as? NoticeDialogListener
-                        // Send the positive button event back to the host activity
-                        listener?.onDialogPositiveClick(this)
+                        val listener = parentFragmentManager.fragments.first() as? ScheduleDeleteBtnDialogListener
+                        listener?.onDeleteBtnDialogPositiveClick(this)
                     } catch (e: ClassCastException) {
-                        // The activity doesn't implement the interface, throw exception
                         throw ClassCastException((parentFragmentManager.fragments.first()?.toString() +
                                 " must implement NoticeDialogListener"))
                     }

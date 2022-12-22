@@ -30,4 +30,6 @@
     <string name="createBtn">ボタン追加</string>
     <string name="バス時刻表">バス時刻表</string>
     <string name="report">報告</string>
+    <string name="createClass">講義登録</string>
+    <string name="deleteClass">講義削除</string>
 </resources>
