@@ -21,6 +21,8 @@ import com.hiyama.anpikakuninproject.databinding.FragmentNotificationsBinding
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
 
+import org.junit.Test
+
 class NotificationsFragment : Fragment() {
 
     val commServer = CommServer()
@@ -41,7 +43,7 @@ class NotificationsFragment : Fragment() {
         return fragmentView
     }
 
-    private fun getNotification(){
+    fun getNotification(){
         val result = getInfo()
         while(commServer.responseCode == -1){/* wait for response */}
         if (commServer.responseCode == HttpURLConnection.HTTP_OK) {
@@ -56,8 +58,9 @@ class NotificationsFragment : Fragment() {
     }
 
     @UiThread
-    private fun getInfo(): String{
+    fun getInfo(): String{
         var result = ""
+        commServer.setURL(CommServer.NOTIFICATION)
         runBlocking {
             result = commServer.getInfoBackGroundRunner("UTF-8")
             Log.i("GET",result)
