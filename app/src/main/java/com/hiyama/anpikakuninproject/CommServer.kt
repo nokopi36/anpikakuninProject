@@ -85,7 +85,8 @@ class CommServer {
                 url = ""
             }
             NOTIFICATION -> {
-                url = ""
+                setRequest(GET)
+                url = "http://$ipAddress:$port/api/news"
             }
             INQUIRY -> {
                 url = ""

@@ -40,4 +40,13 @@ object JsonParser {
         }
     }
 
+    fun notificationParse(str: String) : Notification? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val notification: Notification = mapper.readValue(str)
+            notification
+        }
+    }
+
 }
