@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
 //        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
         while(commServer.responseCode == -1){/* wait for response */}
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
-            Log.i("Return Value From Server", "Value: $result")
+            Log.i("Return Val From Server", "Value: $result")
             val loginResult = JsonParser.loginResultParse(result)
             return if (loginResult == null){
                 Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity() {
         while(commServer.responseCode == -1){/* wait for response */}
         Log.i("responseCode", commServer.responseCode.toString())
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
-            Log.i("Return Value From Server", "Value: $result")
+            Log.i("Return Val From Server", "Value: $result")
             if (result != "null"){
                 val postResultTest = JsonParser.loginResultParse(result)
                 Log.i("postResultTest", postResultTest.toString())
@@ -177,7 +177,7 @@ class LoginActivity : AppCompatActivity() {
         val result = getInfo()
         while(commServer.responseCode == -1){/* wait for response */}
         if (commServer.responseCode == HttpURLConnection.HTTP_OK){
-            Log.i("Return Value From Server", "Value: $result")
+            Log.i("Return Val From Server", "Value: $result")
             val safetyCheck = JsonParser.safetyCheckParse(result)
             SafetyCheckInfo.initialize(safetyCheck!!)
             if (SafetyCheckInfo.check == "True"){
