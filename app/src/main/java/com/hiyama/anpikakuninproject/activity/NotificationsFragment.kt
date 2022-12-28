@@ -23,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
 
 import org.junit.Test
+import java.util.*
 
 class NotificationsFragment : Fragment() {
 
@@ -78,18 +79,18 @@ class NotificationsFragment : Fragment() {
         return if (notification == null){
             false
         } else {
-            Log.i("notification parser", notification[0].toString())
-            Log.i("ccccc", notification[0].news_id.toString())
-            Log.i("aaaaa", notification[0].title!!)
-            Log.i("bbbbb", notification[0].content!!)
-            Log.i("ccccc", notification[1].news_id.toString())
-            Log.i("aaaaa", notification[1].title!!)
-            Log.i("bbbbb", notification[1].content!!)
-            for ((index, _) in notification.withIndex()){
+//            Log.i("ccccc", notification[0].news_id.toString())
+//            Log.i("aaaaa", notification[0].title!!)
+//            Log.i("bbbbb", notification[0].content!!)
+//            Log.i("ccccc", notification[1].news_id.toString())
+//            Log.i("aaaaa", notification[1].title!!)
+//            Log.i("bbbbb", notification[1].content!!)
+            val sortedNotification = notification.sortedWith(compareByDescending{ it.news_id })
+            for ((index, _) in sortedNotification.withIndex()){
                 val button = Button(context)
-                button.text = notification[index].title
+                button.text = sortedNotification[index].title
                 button.setOnClickListener {
-                    Toast.makeText(activity, notification[index].content, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, sortedNotification[index].content, Toast.LENGTH_SHORT).show()
                 }
                 linearLayout.addView(button)
             }
@@ -100,7 +101,7 @@ class NotificationsFragment : Fragment() {
     @UiThread
     fun getInfo(): String{
 //        val result = ""
-        val result = "{\"news\":[{\"news_id\": 2, \"title\": \"1\", \"content\": \"news1\"}, {\"news_id\": 1, \"title\": \"2\", \"content\": \"news2\"}]}"
+        val result = "{\"news\":[{\"news_id\": 2, \"title\": \"1\", \"content\": \"news1\"}, {\"news_id\": 1, \"title\": \"2\", \"content\": \"news2\"}, {\"news_id\": 3, \"title\": \"3\", \"content\": \"news3\"}]}"
         Log.i("test result", result)
 //        commServer.setURL(CommServer.NOTIFICATION)
 //        runBlocking {
