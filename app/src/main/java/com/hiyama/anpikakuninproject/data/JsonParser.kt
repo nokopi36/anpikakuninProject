@@ -40,4 +40,13 @@ object JsonParser {
         }
     }
 
+    fun newsParse(str: String) : List<Notification>? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val news= mapper.readValue<News>(str).news
+            news
+        }
+    }
+
 }

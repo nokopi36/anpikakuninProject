@@ -3,10 +3,7 @@ package com.hiyama.anpikakuninproject
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hiyama.anpikakuninproject.data.LoginInfo
-import com.hiyama.anpikakuninproject.data.PassWord
-import com.hiyama.anpikakuninproject.data.PostTest
-import com.hiyama.anpikakuninproject.data.User
+import com.hiyama.anpikakuninproject.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -85,10 +82,14 @@ class CommServer {
                 url = ""
             }
             NOTIFICATION -> {
-                url = ""
+                setRequest(GET)
+                url = "http://$ipAddress:$port/api/news"
             }
             INQUIRY -> {
-                url = ""
+                setRequest(POST)
+                url = "http://$ipAddress:$port/api/inquiry"
+                postData = jacksonObjectMapper().writeValueAsString(Inquiry.getInquiryInfo())
+                Log.i("postData", postData)
             }
             SAFETY_CHECK -> {
                 setRequest(GET)
