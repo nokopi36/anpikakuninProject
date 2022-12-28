@@ -85,11 +85,10 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
     }
 
     private fun addButton(linearLayout: LinearLayout){
+        linearLayout.removeAllViews()
         if (OperationInfo.buttonTitle.isEmpty() || OperationInfo.url.isEmpty()){
             /* do nothing */
-            linearLayout.removeAllViews()
         } else {
-            linearLayout.removeAllViews()
             for ( (index, _) in OperationInfo.buttonTitle.withIndex()){
                 val button = Button(context)
                 button.text = OperationInfo.buttonTitle[index]
