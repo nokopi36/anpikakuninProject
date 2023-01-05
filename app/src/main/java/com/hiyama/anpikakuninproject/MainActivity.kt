@@ -52,8 +52,14 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/AppHcu?t=EmIIQJpOsAWvm85PPRPiAg&s=09"))
                         startActivity(intent)
                     }
+                    .setNegativeButton("Google Formへ") { _, _ ->
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/FsxZvaGRistbbhuK8"))
+                        startActivity(intent)
+                    }
+                    .setNeutralButton("キャンセル") { dialog, _ ->
+                        dialog.cancel()
+                    }
                     .show()
-                Log.i("aaa","aaaaaaa")
                 true
             }
             else -> super.onOptionsItemSelected(item)
