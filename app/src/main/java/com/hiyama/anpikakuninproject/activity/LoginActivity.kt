@@ -42,6 +42,18 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.passWord)
         val testTxt = findViewById<TextView>(R.id.testText)
 
+        val versionNameText = findViewById<TextView>(R.id.versionName)
+
+        val version: String
+        try {
+            val packageName = packageName
+            val packageInfo = packageManager.getPackageInfo(packageName, 0)
+            version = packageInfo.versionName
+            "ver.$version".also { versionNameText.text = it }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+
         /*------------------ここからpush通知に関すること------------------*/
         // インスタンスIDの自動生成を有効化する場合、true
         // AndroidManifestにて自動生成を禁止にしていない場合、不要
