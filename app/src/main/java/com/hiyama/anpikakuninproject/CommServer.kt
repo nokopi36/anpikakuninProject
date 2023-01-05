@@ -149,6 +149,7 @@ class CommServer {
                     }
                 } catch (e: SocketTimeoutException) {
                     Log.w(DEBUG_TAG, "通信タイムアウト", e)
+                    responseCode = 0
                 } catch (e: IOException) {
                     Log.i(DEBUG_TAG, "接続できません", e)
                     throw e

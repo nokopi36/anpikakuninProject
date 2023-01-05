@@ -32,4 +32,5 @@
     <string name="report">報告</string>
     <string name="createClass">講義登録</string>
     <string name="deleteClass">講義削除</string>
+    <string name="cancel">キャンセル</string>
 </resources>

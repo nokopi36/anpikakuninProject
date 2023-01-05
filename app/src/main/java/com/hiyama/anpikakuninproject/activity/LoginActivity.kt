@@ -68,26 +68,26 @@ class LoginActivity : AppCompatActivity() {
         /*------------------ここまで------------------*/
 
         /*以下2つはtestServerに接続するときはコメントアウトする*/
-//        safetyCheckActivity()
-//        autoLogin()
+        safetyCheckActivity()
+        autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         loginBtn.setOnClickListener { // ログインするためのボタン
-//            val userName = userNameEditText.text.toString()
-//            val passWord = passwordEditText.text.toString()
+            val userName = userNameEditText.text.toString()
+            val passWord = passwordEditText.text.toString()
 //            if (checkCorrectEntered(userName, passWord) && testServerLogin()){ // testServerに接続しないときはコメントアウトして下の行を有効化する
-////            if (checkCorrectEntered(userName, passWord)){
-//                UserInfo.userName = userName
-//                UserInfo.password = hashSHA256String(passWord)
-//                sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
-//                sharedPreferences.edit().putString("password", passWord).apply()
-//                commServer.setURL(CommServer.LOGIN)
-//                if (!login()){
-//                    passwordEditText.text.clear()
-//                }
-//            }
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            if (checkCorrectEntered(userName, passWord)){
+                UserInfo.userName = userName
+                UserInfo.password = hashSHA256String(passWord)
+                sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
+                sharedPreferences.edit().putString("password", passWord).apply()
+                commServer.setURL(CommServer.LOGIN)
+                if (!login()){
+                    passwordEditText.text.clear()
+                }
+            }
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
             overridePendingTransition(0,0)
         }
 
@@ -111,15 +111,15 @@ class LoginActivity : AppCompatActivity() {
         val result = loginInfo()
 //        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
         while(commServer.responseCode == -1){/* wait for response */}
-        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
+        if (commServer.responseCode == HttpURLConnection.HTTP_OK) {
             Log.i("Return Val From Server", "Value: $result")
             val loginResult = JsonParser.loginResultParse(result)
-            return if (loginResult == null){
+            return if (loginResult == null) {
                 Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
                 false
             } else {
                 LoginInfo.initialize(loginResult)
-                if (LoginInfo.success){
+                if (LoginInfo.success) {
                     Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
@@ -129,6 +129,9 @@ class LoginActivity : AppCompatActivity() {
                     false
                 }
             }
+        }else if (commServer.responseCode == 0){
+            connectionTimeout(this)
+            return false
         } else {
             incorrectLogin(this)
             return false
@@ -226,6 +229,17 @@ class LoginActivity : AppCompatActivity() {
             .setTitle("●サインイン失敗")
             .setMessage("ユーザ名もしくはパスワードが間違っています")
             .setPositiveButton("OK") { _, _ -> }
+            .show()
+    }
+
+    private fun connectionTimeout(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle("●接続失敗")
+            .setMessage("サーバーに接続できません")
+            .setPositiveButton("アプリを終了する") { _, _ ->
+                finish()
+            }
+            .setCancelable(false)
             .show()
     }
 

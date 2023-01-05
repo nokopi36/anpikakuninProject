@@ -44,6 +44,11 @@ class PasswordActivity : AppCompatActivity()  {
             }
         }
 
+        val changePasswordCancelBtn = findViewById<Button>(R.id.changePasswordCancelBtn)
+        changePasswordCancelBtn.setOnClickListener {
+            finish()
+        }
+
     }
 
     private fun changePassword(): Boolean {
@@ -74,7 +79,7 @@ class PasswordActivity : AppCompatActivity()  {
 
     @UiThread
     private fun postInfo(): String{ //posttest
-        var result = ""
+        var result: String
         runBlocking { // postして結果が返ってくるまで待機
             result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
@@ -116,6 +121,10 @@ class PasswordActivity : AppCompatActivity()  {
             result.append(hexChars[i and 0x0f])
         }
         return result.toString()
+    }
+
+    override fun onBackPressed() { // 端末の戻るボタンが押された時
+        /* do nothing */
     }
 
 }
