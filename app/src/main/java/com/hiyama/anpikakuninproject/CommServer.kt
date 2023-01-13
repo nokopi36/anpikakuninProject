@@ -32,7 +32,7 @@ class CommServer {
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
 
-        var ipAddress = "160.248.2.236"
+        var ipAddress = "ec2-13-114-63-159.ap-northeast-1.compute.amazonaws.com"
         var port = "3000"
 
     }
@@ -41,7 +41,7 @@ class CommServer {
 //    private val port = "3000"
 
 //    本番用のipAddress
-//    private val ipAddress = "13.114.63.159"
+//    private val ipAddress = "13.114.63.159" or "ec2-13-114-63-159.ap-northeast-1.compute.amazonaws.com"
 //    private val port = "3000"
 
     private var request = ""
