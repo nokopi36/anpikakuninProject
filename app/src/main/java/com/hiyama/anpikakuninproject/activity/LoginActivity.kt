@@ -195,9 +195,20 @@ class LoginActivity : AppCompatActivity() {
             Log.i("Return Val From Server", "Value: $result")
             val safetyCheck = JsonParser.safetyCheckParse(result)
             SafetyCheckInfo.initialize(safetyCheck!!)
-            if (SafetyCheckInfo.check == "True"){
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/RyotaHiyama"))
-                startActivity(intent)
+//            if (SafetyCheckInfo.check == "True"){
+            if (true){
+                Log.i("safety", "True")
+                AlertDialog.Builder(this)
+                    .setTitle("安否確認(訓練)")
+                    .setMessage("あなたの安否を報告してください")
+                    .setPositiveButton("報告する") { _, _ ->
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/mSQw4tCZaPM4ymAr6"))
+                        startActivity(intent)
+                    }
+                    .setNeutralButton("キャンセル") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
             } else {
                 /* do nothing */
             }
