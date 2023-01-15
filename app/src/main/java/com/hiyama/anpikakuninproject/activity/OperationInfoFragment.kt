@@ -18,6 +18,9 @@ import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
 import com.hiyama.anpikakuninproject.view.OperationDeleteBtnDialogFragment
 import org.json.JSONArray
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener, OperationDeleteBtnDialogFragment.OperationDeleteBtnDialogListener {
 
@@ -27,7 +30,22 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        safety.safetyCheck(childFragmentManager)
+        val sharedPreferences = activity?.getSharedPreferences("safetyCheckIsShowed", Context.MODE_PRIVATE)
+        val pastTime = sharedPreferences?.getString("nowTime", "NoPastTime")
+        val isAnswered: Boolean
+        if (pastTime == "NoPastTime"){
+            isAnswered = true
+        } else {
+            val target = LocalDateTime.parse(pastTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val now = LocalDateTime.now()
+            isAnswered = ChronoUnit.DAYS.between(target, now) >= 1
+            Log.i("now", now.toString())
+            Log.i("past", target.toString())
+        }
+        if (isAnswered){
+            safety.safetyCheck(childFragmentManager)
+        }
+        Log.i("isAnswered", isAnswered.toString())
         val fragmentView = inflater.inflate(R.layout.fragment_operationinfo, container, false)
         val addLinearLayout = fragmentView.findViewById<LinearLayout>(R.id.addLinearLayout)
 
