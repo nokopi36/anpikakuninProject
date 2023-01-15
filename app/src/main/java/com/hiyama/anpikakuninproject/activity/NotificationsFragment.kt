@@ -1,8 +1,5 @@
 package com.hiyama.anpikakuninproject.activity
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,16 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.hiyama.anpikakuninproject.CommServer
+import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.*
-import com.hiyama.anpikakuninproject.databinding.FragmentNotificationsBinding
-import kotlinx.coroutines.runBlocking
-import java.net.HttpURLConnection
-
-import org.junit.Test
-import java.util.*
 
 class NotificationsFragment : Fragment() {
 

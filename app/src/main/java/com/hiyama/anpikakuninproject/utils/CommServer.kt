@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.utils
 
 import android.util.Log
 import androidx.annotation.WorkerThread

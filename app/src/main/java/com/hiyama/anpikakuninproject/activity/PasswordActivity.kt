@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.hiyama.anpikakuninproject.CommServer
+import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.ChangePasswordResultInfo
 import com.hiyama.anpikakuninproject.data.JsonParser

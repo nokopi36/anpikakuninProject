@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.hiyama.anpikakuninproject.CommServer
+import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.MainActivity
 import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.R
@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
         /*------------------ここまで------------------*/
 
         /*以下2つはtestServerに接続するときはコメントアウトする*/
-        safetyCheckActivity()
+        safetyCheck()
         autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
@@ -187,7 +187,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun safetyCheckActivity(){ // 安否確認用の関数
+    private fun safetyCheck(){ // 安否確認用の関数
         commServer.setURL(CommServer.SAFETY_CHECK)
         val result = getInfo()
         while(commServer.responseCode == -1){/* wait for response */}

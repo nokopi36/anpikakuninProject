@@ -29,7 +29,7 @@
             android:resource="@color/purple_200" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".utils.MyFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
