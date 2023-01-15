@@ -22,22 +22,11 @@ class Safety {
             SafetyCheckInfo.initialize(safetyCheck!!)
 //            if (SafetyCheckInfo.check == "True"){
             if (true){
-                Log.i("safety", "True")
                 safetyCheckDialog.show(fragmentManager, "safetyCheck")
             } else {
                 /* do nothing */
             }
         }
     }
-
-//    @UiThread
-//    private fun getInfo(): String{
-//        var result: String
-//        runBlocking {
-//            result = commServer.getInfoBackGroundRunner("UTF-8")
-//            Log.i("GET",result)
-//        }
-//        return result
-//    }
 
 }

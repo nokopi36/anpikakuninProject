@@ -1,6 +1,8 @@
 package com.hiyama.anpikakuninproject.activity
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,9 @@ import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.InquiryInfo
 import com.hiyama.anpikakuninproject.utils.Safety
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class InquiryFragment : Fragment() {
 
@@ -20,7 +25,22 @@ class InquiryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_inquiry, container, false)
-        safety.safetyCheck(childFragmentManager)
+        val sharedPreferences = activity?.getSharedPreferences("safetyCheckIsShowed", Context.MODE_PRIVATE)
+        val pastTime = sharedPreferences?.getString("nowTime", "NoPastTime")
+        val isAnswered: Boolean
+        if (pastTime == "NoPastTime"){
+            isAnswered = true
+        } else {
+            val target = LocalDateTime.parse(pastTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val now = LocalDateTime.now()
+            isAnswered = ChronoUnit.DAYS.between(target, now) >= 1
+            Log.i("now", now.toString())
+            Log.i("past", target.toString())
+        }
+        if (isAnswered){
+            safety.safetyCheck(childFragmentManager)
+        }
+        Log.i("isAnswered", isAnswered.toString())
 
         val inquiryTitleEdit = fragmentView.findViewById<EditText>(R.id.inquiry_title)
         val inquiryContentEdit = fragmentView.findViewById<EditText>(R.id.inquiry_content)
