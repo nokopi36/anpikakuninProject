@@ -1,7 +1,5 @@
 package com.hiyama.anpikakuninproject.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -13,27 +11,19 @@ import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
-import androidx.annotation.UiThread
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.hiyama.anpikakuninproject.R
-import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.Lecture
 import com.hiyama.anpikakuninproject.data.LecturesDao
-import com.hiyama.anpikakuninproject.data.SafetyCheckInfo
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
-import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
-import com.hiyama.anpikakuninproject.view.SafetyCheckDialogFragment
 import com.hiyama.anpikakuninproject.view.ScheduleDeleteDialogFragment
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.net.HttpURLConnection
 import kotlin.math.roundToInt
 
 class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogListener, ScheduleDeleteDialogFragment.ScheduleDeleteBtnDialogListener{
@@ -229,18 +219,5 @@ class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogList
             classDao.deleteClass(ScheduleInfo.dayOfweek, ScheduleInfo.classTime[0].digitToInt())
         }
     }
-
-
-    //    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        // This callback will only be called when MyFragment is at least Started.
-//        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            // Handle the back button event
-//
-//        }
-//
-//        // The callback can be enabled or disabled here or in the lambda
-//    }
 
 }
