@@ -2,7 +2,6 @@ package com.hiyama.anpikakuninproject.activity
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -22,7 +21,6 @@ import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.DataChecker
 import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.LoginInfo
-import com.hiyama.anpikakuninproject.data.SafetyCheckInfo
 import com.hiyama.anpikakuninproject.data.UserInfo
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
@@ -80,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
         /*------------------ここまで------------------*/
 
         /*以下2つはtestServerに接続するときはコメントアウトする*/
-        safetyCheck()
+//        safetyCheck()
         autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
@@ -120,33 +118,36 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(): Boolean {
-        val result = loginInfo()
-//        val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val result = commServer.postInfo()
         while(commServer.responseCode == -1){/* wait for response */}
-        if (commServer.responseCode == HttpURLConnection.HTTP_OK) {
-            Log.i("Return Val From Server", "Value: $result")
-            val loginResult = JsonParser.loginResultParse(result)
-            return if (loginResult == null) {
-                Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
-                false
-            } else {
-                LoginInfo.initialize(loginResult)
-                if (LoginInfo.success) {
-                    Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    true
-                } else {
-                    incorrectLogin(this)
+        when (commServer.responseCode) {
+            HttpURLConnection.HTTP_OK -> {
+                Log.i("Return Val From Server", "Value: $result")
+                val loginResult = JsonParser.loginResultParse(result)
+                return if (loginResult == null) {
+                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
                     false
+                } else {
+                    LoginInfo.initialize(loginResult)
+                    if (LoginInfo.success) {
+                        Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        true
+                    } else {
+                        incorrectLogin(this)
+                        false
+                    }
                 }
             }
-        }else if (commServer.responseCode == 0){
-            connectionTimeout(this)
-            return false
-        } else {
-            incorrectLogin(this)
-            return false
+            0 -> {
+                connectionTimeout(this)
+                return false
+            }
+            else -> {
+                incorrectLogin(this)
+                return false
+            }
         }
     }
 
@@ -187,34 +188,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun safetyCheck(){ // 安否確認用の関数
-        commServer.setURL(CommServer.SAFETY_CHECK)
-        val result = getInfo()
-        while(commServer.responseCode == -1){/* wait for response */}
-        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
-            Log.i("Return Val From Server", "Value: $result")
-            val safetyCheck = JsonParser.safetyCheckParse(result)
-            SafetyCheckInfo.initialize(safetyCheck!!)
-//            if (SafetyCheckInfo.check == "True"){
-            if (true){
-                Log.i("safety", "True")
-                AlertDialog.Builder(this)
-                    .setTitle("安否確認(訓練)")
-                    .setMessage("あなたの安否を報告してください")
-                    .setPositiveButton("報告する") { _, _ ->
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/mSQw4tCZaPM4ymAr6"))
-                        startActivity(intent)
-                    }
-                    .setNeutralButton("キャンセル") { dialog, _ ->
-                        dialog.cancel()
-                    }
-                    .show()
-            } else {
-                /* do nothing */
-            }
-        }
-    }
-
     @UiThread
     private fun getInfo(): String{
         var result: String
@@ -226,7 +199,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @UiThread
-    private fun postInfo(): String{ //posttest
+    private fun postInfo(): String{ //postTest
         val postTxt = findViewById<TextView>(R.id.postText)
         var result: String
         runBlocking { // postして結果が返ってくるまで待機
@@ -237,15 +210,15 @@ class LoginActivity : AppCompatActivity() {
         return result
     }
 
-    @UiThread
-    private fun loginInfo(): String{ //posttest
-        var result: String
-        runBlocking { // postして結果が返ってくるまで待機
-            result = commServer.postInfoBackGroundRunner("UTF-8")
-            Log.i("POST",result)
-        }
-        return result
-    }
+//    @UiThread
+//    private fun loginInfo(): String{ //postTest
+//        var result: String
+//        runBlocking { // postして結果が返ってくるまで待機
+//            result = commServer.postInfoBackGroundRunner("UTF-8")
+//            Log.i("POST",result)
+//        }
+//        return result
+//    }
 
     private fun incorrectLogin(context: Context) {
         AlertDialog.Builder(context)
@@ -307,31 +280,30 @@ class LoginActivity : AppCompatActivity() {
         } else {
             UserInfo.userName = savedUserName!!
             UserInfo.password = hashSHA256String(savedPassWord!!)
-//            UserInfo.fcmToken =
             commServer.setURL(CommServer.LOGIN)
             login()
         }
     }
 
     // testServerに接続するときに使う関数
-    private fun testServerLogin(): Boolean{
-        val testServerIP = findViewById<EditText>(R.id.testServerIP)
-        val testServerPort = findViewById<EditText>(R.id.testServerPort)
-        return if (testServerIP.text.toString().isEmpty() && testServerPort.text.toString().isEmpty()){
-            CommServer.ipAddress = "160.248.2.236"
-            CommServer.port = "3000"
-            true
-        } else if (testServerIP.text.toString().isEmpty() || testServerPort.text.toString().isEmpty()){
-            AlertDialog.Builder(this)
-                .setMessage("IPもしくはPortが入力されていません")
-                .setPositiveButton("OK") { _, _ -> }
-                .show()
-            false
-        } else {
-            CommServer.ipAddress = testServerIP.text.toString()
-            CommServer.port = testServerPort.text.toString()
-            true
-        }
-    }
+//    private fun testServerLogin(): Boolean{
+//        val testServerIP = findViewById<EditText>(R.id.testServerIP)
+//        val testServerPort = findViewById<EditText>(R.id.testServerPort)
+//        return if (testServerIP.text.toString().isEmpty() && testServerPort.text.toString().isEmpty()){
+//            CommServer.ipAddress = "160.248.2.236"
+//            CommServer.port = "3000"
+//            true
+//        } else if (testServerIP.text.toString().isEmpty() || testServerPort.text.toString().isEmpty()){
+//            AlertDialog.Builder(this)
+//                .setMessage("IPもしくはPortが入力されていません")
+//                .setPositiveButton("OK") { _, _ -> }
+//                .show()
+//            false
+//        } else {
+//            CommServer.ipAddress = testServerIP.text.toString()
+//            CommServer.port = testServerPort.text.toString()
+//            true
+//        }
+//    }
 
 }
