@@ -10,25 +10,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.UiThread
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.OperationInfo
+import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
 import com.hiyama.anpikakuninproject.view.OperationDeleteBtnDialogFragment
-import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 
 class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener, OperationDeleteBtnDialogFragment.OperationDeleteBtnDialogListener {
 
-    val commServer = CommServer()
+    private val safety = Safety()
     private val newOperationDialog = NewOperationDialogFragment()
     private val operationDeleteBtnDialog = OperationDeleteBtnDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        safety.safetyCheck(childFragmentManager)
         val fragmentView = inflater.inflate(R.layout.fragment_operationinfo, container, false)
         val addLinearLayout = fragmentView.findViewById<LinearLayout>(R.id.addLinearLayout)
 
@@ -100,16 +99,6 @@ class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDi
                 linearLayout.addView(button)
             }
         }
-    }
-
-    @UiThread
-    private fun getInfo(): String{
-        var result: String
-        runBlocking {
-            result = commServer.getInfoBackGroundRunner("UTF-8")
-            Log.i("GET",result)
-        }
-        return result
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment){

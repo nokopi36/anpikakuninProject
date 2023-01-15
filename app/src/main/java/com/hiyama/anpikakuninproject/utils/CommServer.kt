@@ -1,10 +1,12 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.utils
 
 import android.util.Log
+import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hiyama.anpikakuninproject.data.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
@@ -32,7 +34,7 @@ class CommServer {
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
 
-        var ipAddress = "160.248.2.236"
+        var ipAddress = "ec2-13-114-63-159.ap-northeast-1.compute.amazonaws.com"
         var port = "3000"
 
     }
@@ -41,7 +43,7 @@ class CommServer {
 //    private val port = "3000"
 
 //    本番用のipAddress
-//    private val ipAddress = "13.114.63.159"
+//    private val ipAddress = "13.114.63.159" or "ec2-13-114-63-159.ap-northeast-1.compute.amazonaws.com"
 //    private val port = "3000"
 
     private var request = ""
@@ -222,6 +224,26 @@ class CommServer {
         }
         Log.i("post:returnVAL", returnVal)
         return returnVal
+    }
+
+    @UiThread
+    fun getInfo(): String{
+        var result: String
+        runBlocking {
+            result = getInfoBackGroundRunner("UTF-8")
+            Log.i("GET",result)
+        }
+        return result
+    }
+
+    @UiThread
+    fun postInfo(): String{ //postTest
+        var result: String
+        runBlocking { // postして結果が返ってくるまで待機
+            result = postInfoBackGroundRunner("UTF-8")
+            Log.i("POST",result)
+        }
+        return result
     }
 
 }

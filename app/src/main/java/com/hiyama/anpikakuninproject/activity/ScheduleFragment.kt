@@ -20,6 +20,7 @@ import com.hiyama.anpikakuninproject.data.Lecture
 import com.hiyama.anpikakuninproject.data.LecturesDao
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
+import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
 import com.hiyama.anpikakuninproject.view.ScheduleDeleteDialogFragment
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ import kotlin.math.roundToInt
 
 class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogListener, ScheduleDeleteDialogFragment.ScheduleDeleteBtnDialogListener{
 
+    private val safety = Safety()
     private val newClassNameDialog = NewClassNameDialogFragment()
     private val scheduleDeleteDialog = ScheduleDeleteDialogFragment()
     private lateinit var classDao : LecturesDao
@@ -34,6 +36,7 @@ class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogList
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_schedule, container, false)
+        safety.safetyCheck(childFragmentManager)
 
         val db = Room.databaseBuilder(
             requireContext(),
@@ -216,18 +219,5 @@ class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogList
             classDao.deleteClass(ScheduleInfo.dayOfweek, ScheduleInfo.classTime[0].digitToInt())
         }
     }
-
-
-    //    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        // This callback will only be called when MyFragment is at least Started.
-//        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            // Handle the back button event
-//
-//        }
-//
-//        // The callback can be enabled or disabled here or in the lambda
-//    }
 
 }
