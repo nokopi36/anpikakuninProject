@@ -1,10 +1,12 @@
 package com.hiyama.anpikakuninproject.utils
 
 import android.util.Log
+import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hiyama.anpikakuninproject.data.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
@@ -222,6 +224,26 @@ class CommServer {
         }
         Log.i("post:returnVAL", returnVal)
         return returnVal
+    }
+
+    @UiThread
+    fun getInfo(): String{
+        var result: String
+        runBlocking {
+            result = getInfoBackGroundRunner("UTF-8")
+            Log.i("GET",result)
+        }
+        return result
+    }
+
+    @UiThread
+    fun postInfo(): String{ //postTest
+        var result: String
+        runBlocking { // postして結果が返ってくるまで待機
+            result = postInfoBackGroundRunner("UTF-8")
+            Log.i("POST",result)
+        }
+        return result
     }
 
 }
