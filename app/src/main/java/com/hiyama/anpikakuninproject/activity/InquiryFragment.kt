@@ -12,15 +12,18 @@ import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.InquiryInfo
+import com.hiyama.anpikakuninproject.utils.Safety
 import kotlinx.coroutines.runBlocking
 
 class InquiryFragment : Fragment() {
 
     private val commServer = CommServer()
+    private val safety = Safety()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_inquiry, container, false)
+        safety.safetyCheck(childFragmentManager)
 
         val inquiryTitleEdit = fragmentView.findViewById<EditText>(R.id.inquiry_title)
         val inquiryContentEdit = fragmentView.findViewById<EditText>(R.id.inquiry_content)

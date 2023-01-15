@@ -1,5 +1,7 @@
 package com.hiyama.anpikakuninproject.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,22 +13,32 @@ import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.annotation.UiThread
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.Lecture
 import com.hiyama.anpikakuninproject.data.LecturesDao
+import com.hiyama.anpikakuninproject.data.SafetyCheckInfo
 import com.hiyama.anpikakuninproject.data.ScheduleDB
 import com.hiyama.anpikakuninproject.data.ScheduleInfo
+import com.hiyama.anpikakuninproject.utils.CommServer
+import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewClassNameDialogFragment
+import com.hiyama.anpikakuninproject.view.SafetyCheckDialogFragment
 import com.hiyama.anpikakuninproject.view.ScheduleDeleteDialogFragment
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.net.HttpURLConnection
 import kotlin.math.roundToInt
 
 class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogListener, ScheduleDeleteDialogFragment.ScheduleDeleteBtnDialogListener{
 
+    private val safety = Safety()
     private val newClassNameDialog = NewClassNameDialogFragment()
     private val scheduleDeleteDialog = ScheduleDeleteDialogFragment()
     private lateinit var classDao : LecturesDao
@@ -34,6 +46,7 @@ class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogList
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragmentView = inflater.inflate(R.layout.fragment_schedule, container, false)
+        safety.safetyCheck(childFragmentManager)
 
         val db = Room.databaseBuilder(
             requireContext(),
