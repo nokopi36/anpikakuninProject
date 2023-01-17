@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit
 
 class NotificationsFragment : Fragment() {
 
-    val commServer = CommServer()
+    private val commServer = CommServer()
     private val safety = Safety()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
