@@ -3,19 +3,17 @@
 
 # 画面構成
 ## InquiartFragment
-まだ未定。仮で学校関連の連絡先一覧を表示
+webclassやいちぽるへ飛べるボタンや問い合わせを行える画面
 
 ## NotificationFragment
-学校からのお知らせや急行連絡を表示する画面
+学校からのお知らせを表示する画面
 
 いちぽるにあるようなものを想定
 
 ## OperationInfoFragment
-バスや電車といった何かしらの運行情報を見ることができる画面
+バスや電車といった運行情報を見ることができる画面
 
-「くるけん」等といったサイトを自分で登録してボタンを追加
-
-![operationSample](https://user-images.githubusercontent.com/94427199/202617932-63d3889b-c024-4440-9504-eebcc52dcd40.png)
+「くるけん」等といったサイトを自分で登録してボタンを追加可能
 
 ## ScheduleFragment
 個人の現在の時間割を見ることができる画面
