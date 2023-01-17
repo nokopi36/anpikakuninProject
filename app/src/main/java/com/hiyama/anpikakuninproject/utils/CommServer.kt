@@ -34,8 +34,8 @@ class CommServer {
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
 
-        var ipAddress = "ec2-35-73-177-154.ap-northeast-1.compute.amazonaws.com"
-        var port = "3000"
+        var ipAddress = "hcu-app.com"
+        var port = "443"
 
     }
 
@@ -63,43 +63,43 @@ class CommServer {
         when (mode) {
             POSTTEST -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login"
+                url = "https://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             }
             TEST -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/test"
+                url = "https://$ipAddress:$port/test"
             }
             LOGIN -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login"
+                url = "https://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
                 Log.i("postData", postData)
             }
             SCHEDULE -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/api/timetable"
+                url = "https://$ipAddress:$port/api/timetable"
             }
             OPERATIONINFO -> {
                 url = ""
             }
             NOTIFICATION -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/api/news"
+                url = "https://$ipAddress:$port/api/news"
             }
             INQUIRY -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/inquiry"
+                url = "https://$ipAddress:$port/api/inquiry"
                 postData = jacksonObjectMapper().writeValueAsString(Inquiry.getInquiryInfo())
                 Log.i("postData", postData)
             }
             SAFETY_CHECK -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/api/safety-check"
+                url = "https://$ipAddress:$port/api/safety-check"
             }
             CHANGE_PASSWORD -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login/update"
+                url = "https://$ipAddress:$port/api/login/update"
                 postData = jacksonObjectMapper().writeValueAsString(PassWord.getPasswordData())
                 Log.i("postData", postData)
             }
