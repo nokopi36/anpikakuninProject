@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -31,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
     private val commServer = CommServer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
