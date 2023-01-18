@@ -3,6 +3,7 @@ package com.hiyama.anpikakuninproject.activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
-import com.hiyama.anpikakuninproject.data.*
+import com.hiyama.anpikakuninproject.data.JsonParser
+import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.utils.Safety
+import com.hiyama.anpikakuninproject.view.NotificationDialogFragment
 import java.net.HttpURLConnection
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,6 +26,7 @@ class NotificationsFragment : Fragment() {
 
     private val commServer = CommServer()
     private val safety = Safety()
+    private val notificationDialogFragment = NotificationDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -57,7 +60,9 @@ class NotificationsFragment : Fragment() {
         val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
             updateBtn.setOnClickListener {
             getNotification(addLinearLayout)
-        }
+            Toast.makeText(activity, "更新完了", Toast.LENGTH_SHORT).show()
+
+            }
 
         return fragmentView
     }
@@ -65,7 +70,6 @@ class NotificationsFragment : Fragment() {
     private fun getNotification(linearLayout: LinearLayout): Boolean{
         commServer.setURL(CommServer.NOTIFICATION)
         val result = commServer.getInfo()
-//        val result = "{\"news\":[{\"auth_id\": 2, \"title\": \"1\", \"content\": \"news1\"}, {\"news_id\": 1, \"title\": \"2\", \"content\": \"news2\"}, {\"news_id\": 3, \"title\": \"3\", \"content\": \"news3\"}]}"
         while(commServer.responseCode == -1){/* wait for response */}
         Log.i("Return Val From Server", "Value: $result")
         val notification = JsonParser.newsParse(result)
@@ -78,8 +82,14 @@ class NotificationsFragment : Fragment() {
                 for ((index, _) in sortedNotification.withIndex()){
                     val button = Button(context)
                     button.text = sortedNotification[index].title
+                    button.gravity = Gravity.START
+                    button.gravity = Gravity.CENTER_VERTICAL
                     button.setOnClickListener {
-                        Toast.makeText(activity, sortedNotification[index].content, Toast.LENGTH_SHORT).show()
+                        val args = Bundle()
+                        args.putString("title", sortedNotification[index].title)
+                        args.putString("content", sortedNotification[index].content)
+                        notificationDialogFragment.arguments = args
+                        notificationDialogFragment.show(childFragmentManager, "notification")
                     }
                     linearLayout.addView(button)
                 }
