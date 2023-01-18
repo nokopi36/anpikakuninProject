@@ -37,4 +37,8 @@
     <string name="error">この文章が見れているのはおかしいよ</string>
     <string name="update">更新</string>
     <string name="allButtons">ボタン一覧</string>
+    <string name="title">タイトル</string>
+    <string name="inquiryContent">問い合わせ内容</string>
+    <string name="send">送信</string>
+    <string name="links">各種リンク</string>
 </resources>
