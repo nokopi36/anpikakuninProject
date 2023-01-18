@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
 
         val userNameEditText = findViewById<EditText>(R.id.userName)
         val passwordEditText = findViewById<EditText>(R.id.passWord)
-        val testTxt = findViewById<TextView>(R.id.testText)
+//        val testTxt = findViewById<TextView>(R.id.testText)
 
         val versionNameText = findViewById<TextView>(R.id.versionName)
 
