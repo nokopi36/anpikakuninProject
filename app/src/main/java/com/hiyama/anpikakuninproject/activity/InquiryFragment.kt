@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
@@ -44,13 +45,23 @@ class InquiryFragment : Fragment() {
 
         val inquiryTitleEdit = fragmentView.findViewById<EditText>(R.id.inquiry_title)
         val inquiryContentEdit = fragmentView.findViewById<EditText>(R.id.inquiry_content)
+        val title = inquiryTitleEdit.text.toString()
+        val content = inquiryContentEdit.text.toString()
 
         val sendBtn = fragmentView.findViewById<Button>(R.id.sendBtn)
         sendBtn.setOnClickListener {
-            InquiryInfo.title = inquiryTitleEdit.text.toString()
-            InquiryInfo.content = inquiryContentEdit.text.toString()
-            commServer.setURL(CommServer.INQUIRY)
-            commServer.postInfo()
+            if (title.isEmpty() || content.isEmpty()){
+                AlertDialog.Builder(activity!!)
+                    .setTitle("●送信失敗")
+                    .setMessage("タイトルもしくは内容が入力されていません")
+                    .setPositiveButton("OK") { _, _ -> }
+                    .show()
+            } else {
+                InquiryInfo.title = title
+                InquiryInfo.content = content
+                commServer.setURL(CommServer.INQUIRY)
+                commServer.postInfo()
+            }
         }
 
         return  fragmentView
