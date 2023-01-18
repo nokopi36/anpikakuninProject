@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/navigation_inquiry"
-        android:icon="@drawable/ic_baseline_ring_volume_24"
-        android:title="@string/問い合わせ"/>
+        android:icon="@drawable/baseline_more_horiz_24"
+        android:title="@string/その他"/>
 
 </menu>
