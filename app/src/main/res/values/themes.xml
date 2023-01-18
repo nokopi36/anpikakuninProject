@@ -1,6 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FDFDFD</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_hcu_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.AnpikakuninProject</item>
+    </style>
+
     <!-- Base application theme. -->
-    <style name="Theme.AnpikakuninProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.AnpikakuninProject" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
