@@ -24,7 +24,7 @@ class OperationDeleteBtnDialogFragment: DialogFragment() {
 
             //Dialogレイアウトにviewを取得
             val inflater = requireActivity().layoutInflater
-            val root = inflater.inflate(R.layout.operation_deletbtn_dialog, null)
+            val root = inflater.inflate(R.layout.operation_deletebtn_dialog, null)
 
             val allButtons = root.findViewById<LinearLayout>(R.id.allButtons)
 

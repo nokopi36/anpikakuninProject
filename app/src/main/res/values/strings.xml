@@ -5,7 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_inquiry">Inquiry</string>
     <string name="時刻表">時刻表</string>
-    <string name="お知らせ">お知らせ</string>
+    <string name="notification">お知らせ</string>
     <string name="時間割">時間割</string>
     <string name="問い合わせ">問い合わせ</string>
     <string name="userNameHint">学籍番号</string>
@@ -34,4 +34,7 @@
     <string name="deleteClass">講義削除</string>
     <string name="cancel">キャンセル</string>
     <string name="isShow">報告済。このメッセージを表示しない。</string>
+    <string name="error">この文章が見れているのはおかしいよ</string>
+    <string name="update">更新</string>
+    <string name="allButtons">ボタン一覧</string>
 </resources>
