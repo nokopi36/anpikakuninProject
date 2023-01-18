@@ -36,4 +36,5 @@
     <string name="isShow">報告済。このメッセージを表示しない。</string>
     <string name="error">この文章が見れているのはおかしいよ</string>
     <string name="update">更新</string>
+    <string name="allButtons">ボタン一覧</string>
 </resources>
