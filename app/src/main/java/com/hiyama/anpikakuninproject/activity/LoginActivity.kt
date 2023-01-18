@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
         /*------------------ここまで------------------*/
 
         /*以下2つはtestServerに接続するときはコメントアウトする*/
-//        safetyCheck()
         autoLogin()
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
@@ -101,20 +100,20 @@ class LoginActivity : AppCompatActivity() {
             overridePendingTransition(0,0)
         }
 
-        val testBtn = findViewById<Button>(R.id.testBtn) //ServerからGETできるかテストするためのボタン
-        testBtn.setOnClickListener {
-            commServer.setURL(CommServer.TEST)
-            val result = getInfo()
-            testTxt.text = result
-            val postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
-            Log.i("postData",postData )
-        }
-
-        val postBtn = findViewById<Button>(R.id.postBtn) //ServerにPOSTできるかテストするためのボタン
-        postBtn.setOnClickListener {
-            commServer.setURL(CommServer.POSTTEST)
-            postTest()
-        }
+//        val testBtn = findViewById<Button>(R.id.testBtn) //ServerからGETできるかテストするためのボタン
+//        testBtn.setOnClickListener {
+//            commServer.setURL(CommServer.TEST)
+//            val result = getInfo()
+//            testTxt.text = result
+//            val postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
+//            Log.i("postData",postData )
+//        }
+//
+//        val postBtn = findViewById<Button>(R.id.postBtn) //ServerにPOSTできるかテストするためのボタン
+//        postBtn.setOnClickListener {
+//            commServer.setURL(CommServer.POSTTEST)
+//            postTest()
+//        }
     }
 
     private fun login(): Boolean {
@@ -150,75 +149,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun postTest(): Boolean{
-        val postSuccess = findViewById<TextView>(R.id.postSuccess)
-        val postMessage = findViewById<TextView>(R.id.postMessage)
-        val postToken = findViewById<TextView>(R.id.postToken)
-
-        val result = postInfo()
-        Log.i("postTestResult", result)
-        while(commServer.responseCode == -1){/* wait for response */}
-        Log.i("responseCode", commServer.responseCode.toString())
-        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
-            Log.i("Return Val From Server", "Value: $result")
-            if (result != "null"){
-                val postResultTest = JsonParser.loginResultParse(result)
-                Log.i("postResultTest", postResultTest.toString())
-                return if (postResultTest == null){
-                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
-                    false
-                } else {
-                    LoginInfo.initialize(postResultTest)
-                    postSuccess.text = LoginInfo.success.toString()
-                    Log.i("success", LoginInfo.success.toString())
-                    postMessage.text = LoginInfo.message
-                    Log.i("message", LoginInfo.message)
-                    postToken.text = LoginInfo.token
-                    Log.i("token", LoginInfo.token)
-                    true
-                }
-            } else {
-                incorrectLogin(this)
-                return false
-            }
-        } else {
-            incorrectLogin(this)
-            return false
-        }
-    }
-
-    @UiThread
-    private fun getInfo(): String{
-        var result: String
-        runBlocking {
-            result = commServer.getInfoBackGroundRunner("UTF-8")
-            Log.i("GET",result)
-        }
-        return result
-    }
-
-    @UiThread
-    private fun postInfo(): String{ //postTest
-        val postTxt = findViewById<TextView>(R.id.postText)
-        var result: String
-        runBlocking { // postして結果が返ってくるまで待機
-            result = commServer.postInfoBackGroundRunner("UTF-8")
-            Log.i("POST",result)
-            postTxt.text = result
-        }
-        return result
-    }
-
-//    @UiThread
-//    private fun loginInfo(): String{ //postTest
-//        var result: String
-//        runBlocking { // postして結果が返ってくるまで待機
-//            result = commServer.postInfoBackGroundRunner("UTF-8")
-//            Log.i("POST",result)
-//        }
-//        return result
-//    }
 
     private fun incorrectLogin(context: Context) {
         AlertDialog.Builder(context)
@@ -285,6 +215,75 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+//    private fun postTest(): Boolean{
+//        val postSuccess = findViewById<TextView>(R.id.postSuccess)
+//        val postMessage = findViewById<TextView>(R.id.postMessage)
+//        val postToken = findViewById<TextView>(R.id.postToken)
+//
+//        val result = postInfo()
+//        Log.i("postTestResult", result)
+//        while(commServer.responseCode == -1){/* wait for response */}
+//        Log.i("responseCode", commServer.responseCode.toString())
+//        if (commServer.responseCode == HttpURLConnection.HTTP_OK){
+//            Log.i("Return Val From Server", "Value: $result")
+//            if (result != "null"){
+//                val postResultTest = JsonParser.loginResultParse(result)
+//                Log.i("postResultTest", postResultTest.toString())
+//                return if (postResultTest == null){
+//                    Toast.makeText(this, "ログインの際にサーバから予期せぬメッセージを受信しました", Toast.LENGTH_LONG).show()
+//                    false
+//                } else {
+//                    LoginInfo.initialize(postResultTest)
+//                    postSuccess.text = LoginInfo.success.toString()
+//                    Log.i("success", LoginInfo.success.toString())
+//                    postMessage.text = LoginInfo.message
+//                    Log.i("message", LoginInfo.message)
+//                    postToken.text = LoginInfo.token
+//                    Log.i("token", LoginInfo.token)
+//                    true
+//                }
+//            } else {
+//                incorrectLogin(this)
+//                return false
+//            }
+//        } else {
+//            incorrectLogin(this)
+//            return false
+//        }
+//    }
+
+//    @UiThread
+//    private fun getInfo(): String{
+//        var result: String
+//        runBlocking {
+//            result = commServer.getInfoBackGroundRunner("UTF-8")
+//            Log.i("GET",result)
+//        }
+//        return result
+//    }
+
+//    @UiThread
+//    private fun postInfo(): String{ //postTest
+//        val postTxt = findViewById<TextView>(R.id.postText)
+//        var result: String
+//        runBlocking { // postして結果が返ってくるまで待機
+//            result = commServer.postInfoBackGroundRunner("UTF-8")
+//            Log.i("POST",result)
+//            postTxt.text = result
+//        }
+//        return result
+//    }
+
+//    @UiThread
+//    private fun loginInfo(): String{ //postTest
+//        var result: String
+//        runBlocking { // postして結果が返ってくるまで待機
+//            result = commServer.postInfoBackGroundRunner("UTF-8")
+//            Log.i("POST",result)
+//        }
+//        return result
+//    }
     // testServerに接続するときに使う関数
 //    private fun testServerLogin(): Boolean{
 //        val testServerIP = findViewById<EditText>(R.id.testServerIP)
