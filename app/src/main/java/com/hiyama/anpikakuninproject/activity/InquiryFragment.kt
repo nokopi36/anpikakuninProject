@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.hiyama.anpikakuninproject.utils.CommServer
@@ -70,11 +71,12 @@ class InquiryFragment : Fragment() {
 
         val inquiryTitleEdit = fragmentView.findViewById<EditText>(R.id.inquiry_title)
         val inquiryContentEdit = fragmentView.findViewById<EditText>(R.id.inquiry_content)
-        val title = inquiryTitleEdit.text.toString()
-        val content = inquiryContentEdit.text.toString()
 
         val sendBtn = fragmentView.findViewById<Button>(R.id.sendBtn)
         sendBtn.setOnClickListener {
+            val title = inquiryTitleEdit.text.toString()
+            val content = inquiryContentEdit.text.toString()
+            Log.i("title,content", "$title,$content")
             if (title.isEmpty() || content.isEmpty()){
                 AlertDialog.Builder(activity!!)
                     .setTitle("●送信失敗")
@@ -82,10 +84,21 @@ class InquiryFragment : Fragment() {
                     .setPositiveButton("OK") { _, _ -> }
                     .show()
             } else {
-                InquiryInfo.title = title
-                InquiryInfo.content = content
-                commServer.setURL(CommServer.INQUIRY)
-                commServer.postInfo()
+                AlertDialog.Builder(activity!!)
+                    .setMessage("送信しますか？")
+                    .setPositiveButton("OK") { _, _ ->
+                        InquiryInfo.title = title
+                        InquiryInfo.content = content
+                        commServer.setURL(CommServer.INQUIRY)
+                        commServer.postInfo()
+                        Toast.makeText(activity, "送信しました", Toast.LENGTH_SHORT).show()
+                        inquiryContentEdit.text.clear()
+                        inquiryTitleEdit.text.clear()
+                    }
+                    .setNegativeButton("キャンセル") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
             }
         }
 
