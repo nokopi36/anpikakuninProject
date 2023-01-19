@@ -3,7 +3,6 @@ package com.hiyama.anpikakuninproject
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -50,12 +49,12 @@ class MainActivity : AppCompatActivity() {
             R.id.report -> {
                 AlertDialog.Builder(this)
                     .setTitle("報告")
-                    .setMessage("不具合報告やその他報告はTwitterのDMへ")
+                    .setMessage("不具合報告やその他報告はTwitterのDMもしくはFormsへ")
                     .setPositiveButton("Twitterへ") { _, _ ->
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/AppHcu?t=EmIIQJpOsAWvm85PPRPiAg&s=09"))
                         startActivity(intent)
                     }
-                    .setNegativeButton("Google Formへ") { _, _ ->
+                    .setNegativeButton("Google Formsへ") { _, _ ->
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/FsxZvaGRistbbhuK8"))
                         startActivity(intent)
                     }
