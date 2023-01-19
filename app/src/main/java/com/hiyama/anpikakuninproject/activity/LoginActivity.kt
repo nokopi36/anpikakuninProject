@@ -90,9 +90,11 @@ class LoginActivity : AppCompatActivity() {
 //            if (checkCorrectEntered(userName, passWord) && testServerLogin()){ // testServerに接続しないときはコメントアウトして下の行を有効化する
             if (checkCorrectEntered(userName, passWord)){
                 UserInfo.userName = userName
-                UserInfo.password = hashSHA256String(passWord)
+//                UserInfo.password = hashSHA256String(passWord)
+                UserInfo.password = passWord
                 sharedPreferences.edit().putString("userName", UserInfo.userName).apply()
                 sharedPreferences.edit().putString("password", passWord).apply()
+                sharedPreferences.edit().putString("fcmToken", UserInfo.fcmToken).apply()
                 commServer.setURL(CommServer.LOGIN)
                 if (!login()){
                     passwordEditText.text.clear()
@@ -207,12 +209,15 @@ class LoginActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
         val savedUserName = sharedPreferences.getString("userName", "NO_USERNAME")
         val savedPassWord = sharedPreferences.getString("password", "NO_PASSWORD")
+        val savedFcmToken = sharedPreferences.getString("fcmToken", "NO_TOKEN")
         Log.i(">>>", "sharedUser:$savedUserName, sharedPass:$savedPassWord")
         if (savedUserName == "NO_USERNAME" || savedPassWord == "NO_PASSWORD"){
             /* do nothing */
         } else {
             UserInfo.userName = savedUserName!!
-            UserInfo.password = hashSHA256String(savedPassWord!!)
+//            UserInfo.password = hashSHA256String(savedPassWord!!)
+            UserInfo.password = savedPassWord!!
+            UserInfo.fcmToken = savedFcmToken!!
             commServer.setURL(CommServer.LOGIN)
             login()
         }
