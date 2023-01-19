@@ -20,8 +20,8 @@ class Safety {
             Log.i("Return Val From Server", "Value: $result")
             val safetyCheck = JsonParser.safetyCheckParse(result)
             SafetyCheckInfo.initialize(safetyCheck!!)
-//            if (SafetyCheckInfo.check == "True"){
-            if (true){
+            if (SafetyCheckInfo.check == "True"){
+//            if (true){
                 safetyCheckDialog.show(fragmentManager, "safetyCheck")
             } else {
                 /* do nothing */
