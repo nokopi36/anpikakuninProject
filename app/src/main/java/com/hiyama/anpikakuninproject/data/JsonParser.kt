@@ -49,4 +49,13 @@ object JsonParser {
         }
     }
 
+    fun signInResultParse(str: String) : SignInResult? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val signInResult: SignInResult = mapper.readValue(str)
+            signInResult
+        }
+    }
+
 }

@@ -8,22 +8,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.MainActivity
-import com.hiyama.anpikakuninproject.data.PostTest
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.DataChecker
 import com.hiyama.anpikakuninproject.data.JsonParser
 import com.hiyama.anpikakuninproject.data.LoginInfo
+import com.hiyama.anpikakuninproject.data.SignInInfo
 import com.hiyama.anpikakuninproject.data.UserInfo
-import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
 import java.security.MessageDigest
 
@@ -73,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
                 // ここで取得したtokenをテストする際のインスタンスIDとして設定する
                 val token = task.result
                 UserInfo.fcmToken = token
+                SignInInfo.fcm_token = token
 
                 val msg = "InstanceID Token: $token"
                 Log.d("msg",msg)
@@ -105,6 +103,12 @@ class LoginActivity : AppCompatActivity() {
             overridePendingTransition(0,0)
         }
 
+        val newUserBtn = findViewById<Button>(R.id.signInBtn)
+        newUserBtn.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+
 //        val testBtn = findViewById<Button>(R.id.testBtn) //ServerからGETできるかテストするためのボタン
 //        testBtn.setOnClickListener {
 //            commServer.setURL(CommServer.TEST)
@@ -133,13 +137,13 @@ class LoginActivity : AppCompatActivity() {
                     false
                 } else {
                     LoginInfo.initialize(loginResult)
-                    if (LoginInfo.success) {
+                    if (LoginInfo.succeed) {
                         Toast.makeText(this, "${UserInfo.userName}さん ようこそ！", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         true
                     } else {
-                        incorrectLogin(this)
+                        incorrectLogin(this, LoginInfo.message)
                         false
                     }
                 }
@@ -149,16 +153,16 @@ class LoginActivity : AppCompatActivity() {
                 return false
             }
             else -> {
-                incorrectLogin(this)
+                incorrectLogin(this, "予期せぬエラーが発生しました。")
                 return false
             }
         }
     }
 
-    private fun incorrectLogin(context: Context) {
+    private fun incorrectLogin(context: Context, message: String) {
         AlertDialog.Builder(context)
             .setTitle("●サインイン失敗")
-            .setMessage("ユーザ名もしくはパスワードが間違っています")
+            .setMessage(message)
             .setPositiveButton("OK") { _, _ -> }
             .show()
     }
@@ -180,8 +184,8 @@ class LoginActivity : AppCompatActivity() {
         /* 文字列が入力されていない */
         if(userName.isEmpty() || password.isEmpty()) {
             AlertDialog.Builder(this)
-                .setTitle("●サインイン失敗")
-                .setMessage("ユーザ名もしくはパスワードが入力されていません")
+                .setTitle("●ログイン失敗")
+                .setMessage("学籍番号もしくはパスワードが入力されていません")
                 .setPositiveButton("OK") { _, _ -> }
                 .show()
             return false

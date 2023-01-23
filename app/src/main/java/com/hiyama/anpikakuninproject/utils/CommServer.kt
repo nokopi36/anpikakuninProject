@@ -33,6 +33,7 @@ class CommServer {
         const val INQUIRY = 4
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
+        const val NEW_USER = 7
 
         var ipAddress = "hcu-app.com"
         var port = "443"
@@ -101,6 +102,12 @@ class CommServer {
                 setRequest(POST)
                 url = "https://$ipAddress:$port/api/login/update"
                 postData = jacksonObjectMapper().writeValueAsString(PassWord.getPasswordData())
+                Log.i("postData", postData)
+            }
+            NEW_USER -> {
+                setRequest(POST)
+                url = "https://$ipAddress:$port/api/sign-in"
+                postData = jacksonObjectMapper().writeValueAsString(SignIn.getSignInInfo())
                 Log.i("postData", postData)
             }
         }

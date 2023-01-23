@@ -15,7 +15,7 @@ object DataChecker {
         } else {
             AlertDialog.Builder(context)
                 .setTitle("●サインイン失敗")
-                .setMessage("ユーザ名は数字7文字で入力してください")
+                .setMessage("学籍番号は数字7文字で入力してください")
                 .setPositiveButton("OK") { _, _ -> }
                 .show()
             false

@@ -107,6 +107,7 @@ class InquiryFragment : Fragment() {
             val button = Button(context)
             button.text = buttonTitle[index]
             button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            button.isAllCaps = false
             button.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(buttonUrl[index]))
                 startActivity(intent)
