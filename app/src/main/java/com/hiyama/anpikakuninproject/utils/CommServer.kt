@@ -1,15 +1,12 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.utils
 
-import android.content.Context
 import android.util.Log
+import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
-import androidx.appcompat.app.AlertDialog
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hiyama.anpikakuninproject.data.LoginInfo
-import com.hiyama.anpikakuninproject.data.PassWord
-import com.hiyama.anpikakuninproject.data.PostTest
-import com.hiyama.anpikakuninproject.data.User
+import com.hiyama.anpikakuninproject.data.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
@@ -36,11 +33,20 @@ class CommServer {
         const val INQUIRY = 4
         const val SAFETY_CHECK = 5
         const val CHANGE_PASSWORD = 6
+        const val NEW_USER = 7
+
+        var ipAddress = "hcu-app.com"
+        var port = "443"
 
     }
 
-    private val ipAddress = "160.248.2.236"
-    private val port = "3000"
+//    private val ipAddress = "160.248.2.236"
+//    private val port = "3000"
+
+//    本番用のipAddress
+//    private val ipAddress = "35.73.177.154" or "ec2-35-73-177-154.ap-northeast-1.compute.amazonaws.com"
+//    private val port = "3000"
+
     private var request = ""
     private var url = ""
     private var postData = ""
@@ -58,39 +64,50 @@ class CommServer {
         when (mode) {
             POSTTEST -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login"
+                url = "https://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(PostTest.getPostData())
             }
             TEST -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/test"
+                url = "https://$ipAddress:$port/test"
             }
             LOGIN -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login"
+                url = "https://$ipAddress:$port/api/login"
                 postData = jacksonObjectMapper().writeValueAsString(User.getUserInfo())
                 Log.i("postData", postData)
             }
             SCHEDULE -> {
-                url = ""
+                setRequest(GET)
+                url = "https://$ipAddress:$port/api/timetable"
             }
             OPERATIONINFO -> {
                 url = ""
             }
             NOTIFICATION -> {
-                url = ""
+                setRequest(GET)
+                url = "https://$ipAddress:$port/api/news"
             }
             INQUIRY -> {
-                url = ""
+                setRequest(POST)
+                url = "https://$ipAddress:$port/api/inquiry"
+                postData = jacksonObjectMapper().writeValueAsString(Inquiry.getInquiryInfo())
+                Log.i("postData", postData)
             }
             SAFETY_CHECK -> {
                 setRequest(GET)
-                url = "http://$ipAddress:$port/api/safety-check"
+                url = "https://$ipAddress:$port/api/safety-check"
             }
             CHANGE_PASSWORD -> {
                 setRequest(POST)
-                url = "http://$ipAddress:$port/api/login/update"
+                url = "https://$ipAddress:$port/api/login/update"
                 postData = jacksonObjectMapper().writeValueAsString(PassWord.getPasswordData())
+                Log.i("postData", postData)
+            }
+            NEW_USER -> {
+                setRequest(POST)
+                url = "https://$ipAddress:$port/api/sign-in"
+                postData = jacksonObjectMapper().writeValueAsString(SignIn.getSignInInfo())
                 Log.i("postData", postData)
             }
         }
@@ -141,6 +158,7 @@ class CommServer {
                     }
                 } catch (e: SocketTimeoutException) {
                     Log.w(DEBUG_TAG, "通信タイムアウト", e)
+                    responseCode = 0
                 } catch (e: IOException) {
                     Log.i(DEBUG_TAG, "接続できません", e)
                     throw e
@@ -213,6 +231,26 @@ class CommServer {
         }
         Log.i("post:returnVAL", returnVal)
         return returnVal
+    }
+
+    @UiThread
+    fun getInfo(): String{
+        var result: String
+        runBlocking {
+            result = getInfoBackGroundRunner("UTF-8")
+            Log.i("GET",result)
+        }
+        return result
+    }
+
+    @UiThread
+    fun postInfo(): String{ //postTest
+        var result: String
+        runBlocking { // postして結果が返ってくるまで待機
+            result = postInfoBackGroundRunner("UTF-8")
+            Log.i("POST",result)
+        }
+        return result
     }
 
 }

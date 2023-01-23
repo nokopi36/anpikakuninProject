@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">anpikakuninProject</string>
+    <string name="app_name">いちぴろ</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_inquiry">Inquiry</string>
     <string name="時刻表">時刻表</string>
-    <string name="お知らせ">お知らせ</string>
+    <string name="notification">お知らせ</string>
     <string name="時間割">時間割</string>
-    <string name="問い合わせ">各種問い合わせ</string>
+    <string name="問い合わせ">問い合わせ</string>
     <string name="userNameHint">学籍番号</string>
     <string name="password">パスワード</string>
     <string name="login">login</string>
@@ -24,4 +24,28 @@
     <string name="lectureLocation">講義室</string>
     <string name="buttonTitle">登録名</string>
     <string name="url">URL</string>
+    <string name="testServerIpText">TestServerIP</string>
+    <string name="testServerPortText">testServerPort</string>
+    <string name="deleteBtn">ボタン削除</string>
+    <string name="createBtn">ボタン追加</string>
+    <string name="バス時刻表">バス時刻表</string>
+    <string name="report">報告</string>
+    <string name="createClass">講義登録</string>
+    <string name="deleteClass">講義削除</string>
+    <string name="cancel">キャンセル</string>
+    <string name="isShow">報告済。このメッセージを表示しない。</string>
+    <string name="error">この文章が見れているのはおかしいよ</string>
+    <string name="update">更新</string>
+    <string name="allButtons">ボタン一覧</string>
+    <string name="title">タイトル</string>
+    <string name="inquiryContent">問い合わせ内容</string>
+    <string name="send">送信</string>
+    <string name="links">各種リンク</string>
+    <string name="その他">その他</string>
+    <string name="addUser">新規登録</string>
+    <string name="againPassword">確認パスワード</string>
+    <string name="emailExample">例：○○○○@e.hiroshima-cu.ac.jp</string>
+    <string name="email">メールアドレス</string>
+    <string name="signIn">ユーザー情報新規登録</string>
+    <string name="name">名前</string>
 </resources>

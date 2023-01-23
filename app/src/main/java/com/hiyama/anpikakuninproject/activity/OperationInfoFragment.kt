@@ -1,5 +1,6 @@
 package com.hiyama.anpikakuninproject.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,24 +9,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
-import androidx.annotation.UiThread
+import android.widget.LinearLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.hiyama.anpikakuninproject.CommServer
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.data.OperationInfo
+import com.hiyama.anpikakuninproject.utils.Safety
 import com.hiyama.anpikakuninproject.view.NewOperationDialogFragment
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.hiyama.anpikakuninproject.view.OperationDeleteBtnDialogFragment
+import org.json.JSONArray
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
-class OperationInfoFragment : Fragment() {
+class OperationInfoFragment : Fragment(), NewOperationDialogFragment.OperationDialogListener, OperationDeleteBtnDialogFragment.OperationDeleteBtnDialogListener {
 
-    val commServer = CommServer()
+    private val safety = Safety()
     private val newOperationDialog = NewOperationDialogFragment()
+    private val operationDeleteBtnDialog = OperationDeleteBtnDialogFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        val sharedPreferences = activity?.getSharedPreferences("safetyCheckIsShowed", Context.MODE_PRIVATE)
+        val pastTime = sharedPreferences?.getString("nowTime", "NoPastTime")
+        val isAnswered: Boolean
+        if (pastTime == "NoPastTime"){
+            isAnswered = true
+        } else {
+            val target = LocalDateTime.parse(pastTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val now = LocalDateTime.now()
+            isAnswered = ChronoUnit.DAYS.between(target, now) >= 1
+            Log.i("now", now.toString())
+            Log.i("past", target.toString())
+        }
+        if (isAnswered){
+            safety.safetyCheck(childFragmentManager)
+        }
+        Log.i("isAnswered", isAnswered.toString())
         val fragmentView = inflater.inflate(R.layout.fragment_operationinfo, container, false)
+        val addLinearLayout = fragmentView.findViewById<LinearLayout>(R.id.addLinearLayout)
+
+        OperationInfo.buttonTitle = loadButtonData("buttonTitle")
+        OperationInfo.url = loadButtonData("buttonUrl")
+        Log.i("shared buttonTitle", OperationInfo.buttonTitle.toString())
+        Log.i("shared buttonUrl", OperationInfo.url.toString())
+        addButton(addLinearLayout)
 
         val hcuInfo = fragmentView.findViewById<Button>(R.id.hcu)
         hcuInfo.setOnClickListener {
@@ -46,21 +74,73 @@ class OperationInfoFragment : Fragment() {
             }
         }
 
+        val deleteBtn = fragmentView.findViewById<Button>(R.id.deleteBtn)
+        deleteBtn.setOnClickListener {
+            parentFragment.run {
+                operationDeleteBtnDialog.show(childFragmentManager, "deleteBtn")
+            }
+        }
+
         return fragmentView
 
     }
 
-    @UiThread
-    private fun getInfo(): String{
-        var result = ""
-        runBlocking {
-            result = commServer.getInfoBackGroundRunner("UTF-8")
-            Log.i("GET",result)
+    private fun saveButtonData(key: String, arrayList: ArrayList<String>){
+        val sharedPreferences = activity?.getSharedPreferences("OperationInfoButton", Context.MODE_PRIVATE)
+        val jsonArray = JSONArray(arrayList)
+        sharedPreferences?.edit()?.putString(key, jsonArray.toString())?.apply()
+    }
+
+    private fun loadButtonData(key: String): ArrayList<String>{
+        val sharedPreferences = activity?.getSharedPreferences("OperationInfoButton", Context.MODE_PRIVATE)
+        val jsonArray = JSONArray(sharedPreferences?.getString(key, "[]"))
+        val arrayList = arrayListOf<String>()
+        for (i in 0 until jsonArray.length()) {
+            arrayList.add(jsonArray.get(i) as String)
         }
-        return result
+        return arrayList
+    }
+
+    private fun addButton(linearLayout: LinearLayout){
+        linearLayout.removeAllViews()
+        if (OperationInfo.buttonTitle.isEmpty() || OperationInfo.url.isEmpty()){
+            /* do nothing */
+        } else {
+            for ( (index, _) in OperationInfo.buttonTitle.withIndex()){
+                val button = Button(context)
+                button.text = OperationInfo.buttonTitle[index]
+                button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                button.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(OperationInfo.url[index]))
+                    startActivity(intent)
+                }
+                linearLayout.addView(button)
+            }
+        }
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment){
+        val addLinearLayout = view?.findViewById<LinearLayout>(R.id.addLinearLayout)
+        addLinearLayout?.let { addButton(it) }
+        Log.i("test", "dialog callback")
+    }
+
+    override fun onDeleteBtnDialogPositiveClick(dialog: DialogFragment){
+        val addLinearLayout = view?.findViewById<LinearLayout>(R.id.addLinearLayout)
+        addLinearLayout?.let { addButton(it) }
+        Log.i("after deleteButtonTitle", OperationInfo.buttonTitle.toString())
+        Log.i("after deleteButtonUrl", OperationInfo.url.toString())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        saveButtonData("buttonTitle", OperationInfo.buttonTitle)
+        saveButtonData("buttonUrl", OperationInfo.url)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveButtonData("buttonTitle", OperationInfo.buttonTitle)
+        saveButtonData("buttonUrl", OperationInfo.url)
     }
 }

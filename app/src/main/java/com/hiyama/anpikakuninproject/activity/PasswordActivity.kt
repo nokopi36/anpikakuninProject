@@ -9,7 +9,8 @@ import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.hiyama.anpikakuninproject.CommServer
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.hiyama.anpikakuninproject.utils.CommServer
 import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.data.ChangePasswordResultInfo
 import com.hiyama.anpikakuninproject.data.JsonParser
@@ -23,6 +24,8 @@ class PasswordActivity : AppCompatActivity()  {
     private val commServer = CommServer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password)
 
@@ -42,6 +45,11 @@ class PasswordActivity : AppCompatActivity()  {
                     newPasswordEditText.text.clear()
                 }
             }
+        }
+
+        val changePasswordCancelBtn = findViewById<Button>(R.id.changePasswordCancelBtn)
+        changePasswordCancelBtn.setOnClickListener {
+            finish()
         }
 
     }
@@ -74,7 +82,7 @@ class PasswordActivity : AppCompatActivity()  {
 
     @UiThread
     private fun postInfo(): String{ //posttest
-        var result = ""
+        var result: String
         runBlocking { // postして結果が返ってくるまで待機
             result = commServer.postInfoBackGroundRunner("UTF-8")
             Log.i("POST",result)
@@ -116,6 +124,10 @@ class PasswordActivity : AppCompatActivity()  {
             result.append(hexChars[i and 0x0f])
         }
         return result.toString()
+    }
+
+    override fun onBackPressed() { // 端末の戻るボタンが押された時
+        /* do nothing */
     }
 
 }

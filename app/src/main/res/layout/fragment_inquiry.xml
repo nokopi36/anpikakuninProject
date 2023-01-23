@@ -7,314 +7,72 @@
     android:layout_height="match_parent"
     tools:context=".activity.InquiryFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inquiry"
+        android:text="@string/問い合わせ"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inquiry_title"
+        android:hint="@string/title"
+        app:layout_constraintTop_toBottomOf="@id/inquiry"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inquiry_content"
+        android:hint="@string/inquiryContent"
+        app:layout_constraintTop_toBottomOf="@id/inquiry_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendBtn"
+        android:text="@string/send"
+        app:layout_constraintTop_toBottomOf="@id/inquiry_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linksText"
+        android:text="@string/links"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/sendBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linksText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintRight_toRightOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/addLinearLayout"
+            android:orientation="vertical">
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text"
-                android:text="大学代表【事務局総務室総務グループ】"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/hcuTell"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text"
-                app:layout_constraintRight_toLeftOf="@id/pushBtn"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/pushBtn"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text"
-                app:layout_constraintLeft_toRightOf="@id/hcuTell"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text1"
-                android:text="入試に関すること【アドミッションセンター（入試グループ）】"
-                app:layout_constraintTop_toBottomOf="@id/hcuTell"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell1"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text1"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn1"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn1"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text1"
-                app:layout_constraintLeft_toRightOf="@id/tell1"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text2"
-                android:text="広島市立大学教務グループ"
-                app:layout_constraintTop_toBottomOf="@id/tell1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell2"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text2"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn2"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn2"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text2"
-                app:layout_constraintLeft_toRightOf="@id/tell2"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text3"
-                android:text="教務に関すること【事務局教務・研究支援室教務グループ】"
-                app:layout_constraintTop_toBottomOf="@id/tell2"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell3"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text3"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn3"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn3"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text3"
-                app:layout_constraintLeft_toRightOf="@id/tell3"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text4"
-                android:text="学生生活に関すること【事務局学生支援室学生支援グループ】"
-                app:layout_constraintTop_toBottomOf="@id/tell3"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell4"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text4"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn4"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn4"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text4"
-                app:layout_constraintLeft_toRightOf="@id/tell4"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text5"
-                android:text="就職に関すること【キャリアセンター（事務局学生支援室学生支援グループ）"
-                app:layout_constraintTop_toBottomOf="@id/tell4"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell5"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text5"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn5"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn5"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text5"
-                app:layout_constraintLeft_toRightOf="@id/tell5"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text6"
-                android:text="広報に関すること【事務局企画室企画グループ】"
-                app:layout_constraintTop_toBottomOf="@id/tell5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell6"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text6"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn6"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn6"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text6"
-                app:layout_constraintLeft_toRightOf="@id/tell6"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text7"
-                android:text="広島市立大学附属図書館【事務局教務・研究支援室附属図書館グループ】"
-                app:layout_constraintTop_toBottomOf="@id/tell6"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell7"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text7"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn7"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn7"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text7"
-                app:layout_constraintLeft_toRightOf="@id/tell7"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text8"
-                android:text="広島平和研究所"
-                app:layout_constraintTop_toBottomOf="@id/tell7"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell8"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text8"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn8"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn8"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text8"
-                app:layout_constraintLeft_toRightOf="@id/tell8"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/text9"
-                android:text="社会連携センター"
-                app:layout_constraintTop_toBottomOf="@id/tell8"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/tell9"
-                android:gravity="center_vertical"
-                android:text="000-000-0000"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/text9"
-                app:layout_constraintRight_toLeftOf="@id/tellBtn9"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/tellBtn9"
-                android:background="@drawable/ic_baseline_call_24"
-                app:layout_constraintTop_toBottomOf="@id/text9"
-                app:layout_constraintLeft_toRightOf="@id/tell9"
-                app:layout_constraintRight_toRightOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </ScrollView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

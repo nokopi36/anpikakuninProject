@@ -40,4 +40,22 @@ object JsonParser {
         }
     }
 
+    fun newsParse(str: String) : List<Notification>? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val news= mapper.readValue<News>(str).news
+            news
+        }
+    }
+
+    fun signInResultParse(str: String) : SignInResult? {
+        return if (str == "") null // 文字列が何も含まれていない
+        else {
+            val mapper = jacksonObjectMapper()
+            val signInResult: SignInResult = mapper.readValue(str)
+            signInResult
+        }
+    }
+
 }

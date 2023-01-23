@@ -1,4 +1,4 @@
-package com.hiyama.anpikakuninproject
+package com.hiyama.anpikakuninproject.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.hiyama.anpikakuninproject.R
 import com.hiyama.anpikakuninproject.activity.LoginActivity
 
 class MyFirebaseMessagingService :FirebaseMessagingService() {
@@ -35,12 +36,16 @@ class MyFirebaseMessagingService :FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage.notification?.body?.let { body ->
             Log.i("Message Notification Body:$body", "a")
-            sendNotification(body)
+//            sendNotification(body)
+            remoteMessage.notification?.title?.let { title ->
+                Log.i("Message Notification Title:$title", "a")
+                sendNotification(body,title)
+            }
         }
     }
 
     // notificationを生成して表示
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageBody: String, messageTitle: String) {
         val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -49,8 +54,8 @@ class MyFirebaseMessagingService :FirebaseMessagingService() {
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-//            .setContentTitle("FCM Message")
+            .setSmallIcon(R.mipmap.ic_hcu_icon)
+            .setContentTitle(messageTitle)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
