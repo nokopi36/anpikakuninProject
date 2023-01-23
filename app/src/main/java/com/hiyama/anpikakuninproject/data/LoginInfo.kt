@@ -1,12 +1,12 @@
 package com.hiyama.anpikakuninproject.data
 
 object LoginInfo {
-    var success = false
+    var succeed = false
     var message = ""
     var token = ""
 
     fun initialize(loginResult: LoginResult) {
-        success = loginResult.success
+        succeed = loginResult.succeed
         message = loginResult.message
         token = loginResult.token.toString()
     }
