@@ -42,4 +42,10 @@
     <string name="send">送信</string>
     <string name="links">各種リンク</string>
     <string name="その他">その他</string>
+    <string name="addUser">新規登録</string>
+    <string name="againPassword">確認パスワード</string>
+    <string name="emailExample">例：○○○○@e.hiroshima-cu.ac.jp</string>
+    <string name="email">メールアドレス</string>
+    <string name="signIn">ユーザー情報新規登録</string>
+    <string name="name">名前</string>
 </resources>

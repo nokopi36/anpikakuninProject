@@ -54,6 +54,12 @@
             android:id="@+id/loginBtn"
             android:text="@string/login"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/signInBtn"
+            android:text="新規登録"/>
+
     </LinearLayout>
 
     <TextView
