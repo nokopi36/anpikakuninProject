@@ -84,6 +84,7 @@ class NotificationsFragment : Fragment() {
                     button.text = sortedNotification[index].title
                     button.gravity = Gravity.START
                     button.gravity = Gravity.CENTER_VERTICAL
+                    button.isAllCaps = false
                     button.setOnClickListener {
                         val args = Bundle()
                         args.putString("title", sortedNotification[index].title)
