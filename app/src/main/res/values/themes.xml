@@ -2,7 +2,7 @@
 
     <style name="AppTheme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FDFDFD</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_hcu_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_mozi</item>
         <item name="postSplashScreenTheme">@style/Theme.AnpikakuninProject</item>
     </style>
 
