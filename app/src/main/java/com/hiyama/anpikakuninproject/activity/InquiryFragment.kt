@@ -32,10 +32,14 @@ class InquiryFragment : Fragment() {
         "UNIVERSAL PASSPORT RX",
         "2022年度学年歴",
         "2022年度授業カレンダー",
-        "後期・第4ターム試験について",
         "大学売店Twitter",
         "食堂メニュー公開Twitter",
-        "広島市立大学"
+        "広島市立大学",
+        "情報処理センター",
+        "語学センター",
+        "付属図書館",
+        "芸術資料館",
+        "キャリアセンター"
     )
     private var buttonUrl = arrayOf(
         "https://ichipol.hiroshima-cu.ac.jp/uniprove_pt/UnLoginAction",
@@ -43,10 +47,14 @@ class InquiryFragment : Fragment() {
         "https://unipa.hiroshima-cu.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml",
         "https://www.hiroshima-cu.ac.jp/uploads/2021/09/a7edd16830d8668a634cdd7d70ea6336-20220323120932580.pdf",
         "https://www.hiroshima-cu.ac.jp/uploads/2021/09/6e728d2876a768271bbabf5d8afe95bb-20220323120933103.pdf",
-        "https://www.hiroshima-cu.ac.jp/student/category0012/c00037702/",
         "https://twitter.com/Kino_ichidai_bc?t=mq91y5kRZ217-IfU7S86CA&s=09",
         "https://twitter.com/HCU_ichipeer?t=wNtWF7XGKF8Emhtv0fBcBQ&s=09",
-        "https://www.hiroshima-cu.ac.jp/"
+        "https://www.hiroshima-cu.ac.jp/",
+        "http://www.ipc.hiroshima-cu.ac.jp/",
+        "https://call.lang.hiroshima-cu.ac.jp/lang/",
+        "https://www.lib.hiroshima-cu.ac.jp/",
+        "http://museum.hiroshima-cu.ac.jp/index.cgi/ja?page=Home",
+        "http://www.career.hiroshima-cu.ac.jp/"
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

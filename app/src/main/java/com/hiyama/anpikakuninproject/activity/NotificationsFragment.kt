@@ -60,7 +60,7 @@ class NotificationsFragment : Fragment() {
         val updateBtn = fragmentView.findViewById<Button>(R.id.updateBtn)
             updateBtn.setOnClickListener {
             getNotification(addLinearLayout)
-            Toast.makeText(activity, "更新完了", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "更新完了", Toast.LENGTH_LONG).show()
 
             }
 
@@ -70,6 +70,7 @@ class NotificationsFragment : Fragment() {
     private fun getNotification(linearLayout: LinearLayout): Boolean{
         commServer.setURL(CommServer.NOTIFICATION)
         val result = commServer.getInfo()
+        val urls = mutableListOf<String>()
         while(commServer.responseCode == -1){/* wait for response */}
         Log.i("Return Val From Server", "Value: $result")
         val notification = JsonParser.newsParse(result)
@@ -80,6 +81,13 @@ class NotificationsFragment : Fragment() {
             } else {
                 val sortedNotification = notification.sortedWith(compareByDescending{ it.news_id })
                 for ((index, _) in sortedNotification.withIndex()){
+                    val url = extractURLs(sortedNotification[index].content!!)
+                    if (url.isEmpty()){
+                        urls.add("noUrl")
+                    } else {
+                        urls.add(url[0])
+                    }
+                    Log.i("urls", urls.toString())
                     val button = Button(context)
                     button.text = sortedNotification[index].title
                     button.gravity = Gravity.START
@@ -89,6 +97,7 @@ class NotificationsFragment : Fragment() {
                         val args = Bundle()
                         args.putString("title", sortedNotification[index].title)
                         args.putString("content", sortedNotification[index].content)
+                        if (urls.isNotEmpty()) args.putString("url", urls[index])
                         notificationDialogFragment.arguments = args
                         notificationDialogFragment.show(childFragmentManager, "notification")
                     }
@@ -99,6 +108,12 @@ class NotificationsFragment : Fragment() {
         } else {
             return true
         }
+    }
+
+    private fun extractURLs(text: String): List<String> {
+        val regex = "(http://|https://)[\\w.\\-/:#?=&;%~+]+"
+        val urls = regex.toRegex(RegexOption.IGNORE_CASE).findAll(text).map{it.value}
+        return urls.toList()
     }
 
     override fun onDestroyView() {

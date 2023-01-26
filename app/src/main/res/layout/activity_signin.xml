@@ -35,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="@string/userNameHint"
-            android:textColor="@color/black"/>
+            android:text="@string/userNameHint"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signInNumberBox"
@@ -55,8 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="@string/name"
-            android:textColor="@color/black"/>
+            android:text="@string/name" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signInNameBox"
@@ -75,8 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="@string/email"
-            android:textColor="@color/black"/>
+            android:text="@string/email" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signInEmailBox"
@@ -96,8 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="@string/password"
-            android:textColor="@color/black"/>
+            android:text="@string/password" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signInPasswordBox"
@@ -117,8 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="@string/againPassword"
-            android:textColor="@color/black"/>
+            android:text="@string/againPassword" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/againPassWordBox"

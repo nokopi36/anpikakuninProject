@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.hiyama.anpikakuninproject"
         minSdk 21
-        targetSdk 32
-        versionCode 2
-        versionName "1.1"
+        targetSdk 33
+        versionCode 6
+        versionName "1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
