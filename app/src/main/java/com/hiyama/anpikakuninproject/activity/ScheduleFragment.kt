@@ -1,6 +1,7 @@
 package com.hiyama.anpikakuninproject.activity
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -153,6 +154,7 @@ class ScheduleFragment : Fragment(), NewClassNameDialogFragment.NoticeDialogList
                 for(date in 1..weekList.size){
                     val cell = TextView(requireContext()).also { textview ->
                         textview.text = ""
+                        textview.setTextColor(Color.BLACK)
                         textview.background = requireContext().getDrawable(R.color.lemonchiffon)
                         textview.gravity = Gravity.CENTER
                         val layoutParams = TableRow.LayoutParams()
