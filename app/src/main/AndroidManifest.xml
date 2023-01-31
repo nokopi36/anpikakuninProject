@@ -64,6 +64,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".activity.WebActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor">
+        </activity>
+
     </application>
 
 </manifest>
