@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.hiyama.anpikakuninproject.R
+import com.hiyama.anpikakuninproject.activity.WebActivity
 
 class NotificationDialogFragment: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -32,7 +33,9 @@ class NotificationDialogFragment: DialogFragment() {
             } else {
                 notificationUrl.text = url
                 notificationUrl.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    val intent = Intent(activity, WebActivity::class.java)
+                    intent.putExtra("url", url)
                     startActivity(intent)
                 }
             }

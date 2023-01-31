@@ -118,6 +118,8 @@ class InquiryFragment : Fragment() {
             button.isAllCaps = false
             button.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(buttonUrl[index]))
+//                val intent = Intent(activity, WebActivity::class.java)
+//                intent.putExtra("url", buttonUrl[index])
                 startActivity(intent)
             }
             addLinearLayout.addView(button)
