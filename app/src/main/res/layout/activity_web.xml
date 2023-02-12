@@ -8,7 +8,7 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/toolBar"
-        android:background="@color/hcuLightBlue"
+        android:background="@color/hcu_light_blue400"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>

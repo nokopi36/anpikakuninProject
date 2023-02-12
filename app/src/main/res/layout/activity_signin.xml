@@ -14,7 +14,7 @@
         android:text="@string/signIn"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:background="@color/hcuLightBlue"
+        android:background="@color/hcu_light_blue400"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
