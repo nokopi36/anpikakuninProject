@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class User (
     @JsonProperty("uuid") var userName:String,
     @JsonProperty("password") var password:String,
-    @JsonProperty("fcmtoken") var fcmtoken:String
+    @JsonProperty("fcm_token") var fcmtoken:String
 ) {
     companion object {
         fun getUserInfo() : User {
